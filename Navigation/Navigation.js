@@ -3,10 +3,12 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../Pages/Home';
-import {Image, View} from 'react-native';
+import {Dimensions, Image, View} from 'react-native';
 import {color} from '../Const/Color';
 import Profile from '../Pages/Profile';
 import Post from '../Pages/Post';
+import {Font} from '../Const/Font';
+const {width} = Dimensions.get('window');
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
   return (
@@ -16,13 +18,18 @@ const TabNavigation = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: color.black,
-          borderTopWidth: 0.26,
-          borderColor: 'rgba(255, 255, 255, 0.3)',
+          borderTopWidth: 0.25,
+          borderColor: 'rgba(255, 255, 255, 0.14)',
         },
         tabBarItemStyle: {
           flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
+        },
+        tabBarLabelStyle: {
+          fontFamily: Font.Regular,
+          color: color.white,
+          fontSize: width * 0.02,
         },
       }}>
       <Tab.Screen
@@ -35,7 +42,7 @@ const TabNavigation = () => {
               style={{width: 20, aspectRatio: 1, tintColor: 'white'}}
             />
           ),
-          tabBarShowLabel: false,
+          // tabBarShowLabel: false,
         }}
       />
 
@@ -49,7 +56,7 @@ const TabNavigation = () => {
               style={{width: 20, aspectRatio: 1, tintColor: 'white'}}
             />
           ),
-          tabBarShowLabel: false,
+          // tabBarShowLabel: false,
         }}
       />
       <Tab.Screen
@@ -62,7 +69,7 @@ const TabNavigation = () => {
               style={{width: 23, aspectRatio: 1, tintColor: 'white'}}
             />
           ),
-          tabBarShowLabel: false,
+          // tabBarShowLabel: false,
         }}
       />
     </Tab.Navigator>

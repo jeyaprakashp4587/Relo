@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "447588547025",
+    "project_id": "relo-fe7f5",
+    "storage_bucket": "relo-fe7f5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447588547025:android:b8cc6e04ac08acd115c8f0",
+        "android_client_info": {
+          "package_name": "com.relo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447588547025-thkd40mg81sok4qqb612l9pgdmgjde9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.relo",
+            "certificate_hash": "f3016adc4baddee662878c9b484185f8b0bbbb61"
+          }
+        },
+        {
+          "client_id": "447588547025-lmolj8v94bujck5urlne3mkc5r7nh3sh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEF4I_4wpQ3s0XinGdYUnWfVSLJNJ9n6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447588547025-lmolj8v94bujck5urlne3mkc5r7nh3sh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

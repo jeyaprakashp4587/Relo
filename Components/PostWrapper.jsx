@@ -28,7 +28,7 @@ const PostWrapper = () => {
     <View
       style={{
         // borderWidth: 5,
-        borderColor: 'red',
+        borderColor: 'white',
         height: height * 0.6,
         marginVertical: 'auto',
       }}>
@@ -59,6 +59,7 @@ const PostWrapper = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             rowGap: 15,
+            backgroundColor: color.black,
           }}>
           {/* profile info */}
           <View
@@ -66,7 +67,7 @@ const PostWrapper = () => {
               flexDirection: 'row',
               alignItems: 'center',
               columnGap: 8,
-              backgroundColor: color.Bg,
+              // backgroundColor: color.Bg,
               padding: 10,
               borderRadius: 10,
               justifyContent: 'center',
@@ -96,7 +97,12 @@ const PostWrapper = () => {
               alignItems: 'center',
               justifyContent: 'space-around',
             }}>
-            <View>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
                 resizeMode="contain"
@@ -106,7 +112,12 @@ const PostWrapper = () => {
                 20
               </Text>
             </View>
-            <View>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
                 resizeMode="contain"
@@ -116,7 +127,12 @@ const PostWrapper = () => {
                 563
               </Text>
             </View>
-            <View>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
                 resizeMode="contain"
@@ -128,34 +144,33 @@ const PostWrapper = () => {
             </View>
           </View>
           {/* vote button */}
-          <LinearGradient
-            colors={['#e6004c', '#ff1a66']}
-            style={{borderRadius: 10}}>
-            <TouchableOpacity
-              style={{
-                padding: 5,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                columnGap: 5,
-              }}>
-              <Image
+
+          <TouchableOpacity
+            style={{
+              padding: 5,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              columnGap: 5,
+              backgroundColor: '#274c77',
+              borderRadius: 5,
+            }}>
+            {/* <Image
                 source={{uri: 'https://i.ibb.co/60TH14Kx/paws.png'}}
                 style={{width: 13, aspectRatio: 1, tintColor: 'white'}}
                 resizeMode="contain"
-              />
-              <Text
-                style={{
-                  color: color.white,
-                  textAlign: 'center',
-                  fontFamily: Font.Regular,
-                  fontSize: width * 0.032,
-                  letterSpacing: 0.3,
-                }}>
-                vote
-              </Text>
-            </TouchableOpacity>
-          </LinearGradient>
+              /> */}
+            <Text
+              style={{
+                color: color.white,
+                textAlign: 'center',
+                fontFamily: Font.SemiBold,
+                fontSize: width * 0.032,
+                letterSpacing: 0.3,
+              }}>
+              vote
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       {/* center label */}
@@ -206,6 +221,7 @@ const PostWrapper = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             rowGap: 15,
+            backgroundColor: color.black,
           }}>
           {/* profile info */}
           <View
@@ -213,7 +229,7 @@ const PostWrapper = () => {
               flexDirection: 'row',
               alignItems: 'center',
               columnGap: 8,
-              backgroundColor: color.Bg,
+              // backgroundColor: color.Bg,
               padding: 10,
               borderRadius: 10,
               justifyContent: 'center',
@@ -243,7 +259,12 @@ const PostWrapper = () => {
               alignItems: 'center',
               justifyContent: 'space-around',
             }}>
-            <View>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
                 resizeMode="contain"
@@ -253,7 +274,12 @@ const PostWrapper = () => {
                 23
               </Text>
             </View>
-            <View>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
                 resizeMode="contain"
@@ -263,7 +289,12 @@ const PostWrapper = () => {
                 53
               </Text>
             </View>
-            <View>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
                 resizeMode="contain"
@@ -275,34 +306,32 @@ const PostWrapper = () => {
             </View>
           </View>
           {/* vote button */}
-          <LinearGradient
-            colors={['#99c2ff', '#0080ff']}
-            style={{borderRadius: 10}}>
-            <TouchableOpacity
-              style={{
-                padding: 5,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                columnGap: 5,
-              }}>
-              <Image
+          <TouchableOpacity
+            style={{
+              padding: 5,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              columnGap: 5,
+              backgroundColor: '#274c77',
+              borderRadius: 5,
+            }}>
+            {/* <Image
                 source={{uri: 'https://i.ibb.co/60TH14Kx/paws.png'}}
                 style={{width: 13, aspectRatio: 1, tintColor: 'white'}}
-                resizeMode="contain"
-              />
-              <Text
-                style={{
-                  color: color.white,
-                  textAlign: 'center',
-                  fontFamily: Font.Regular,
-                  fontSize: width * 0.032,
-                  letterSpacing: 0.3,
-                }}>
-                vote
-              </Text>
-            </TouchableOpacity>
-          </LinearGradient>
+                resizeMode="contain"  447588547025-lmolj8v94bujck5urlne3mkc5r7nh3sh.apps.googleusercontent.com
+              /> */}
+            <Text
+              style={{
+                color: color.white,
+                textAlign: 'center',
+                fontFamily: Font.SemiBold,
+                fontSize: width * 0.032,
+                letterSpacing: 0.3,
+              }}>
+              vote
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

@@ -1,18 +1,22 @@
-import React, {useRef} from 'react';
-import {Dimensions, Text, View, Image} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {Dimensions, Text, View, TouchableOpacity, Image} from 'react-native';
 import {color} from '../Const/Color';
 import {Font} from '../Const/Font';
 import PostWrapper from '../Components/PostWrapper';
 import Carousel from 'react-native-reanimated-carousel';
+import FastImage from 'react-native-fast-image';
 
 const Home = () => {
-  const {width, height} = Dimensions.get('window');
+  const {width} = Dimensions.get('window');
   const data = [
     {title: 'First Item'},
     {title: 'Second Item'},
     {title: 'Third Item'},
   ];
   const carouselRef = useRef(null);
+  const renderItem = useCallback(({item}) => {
+    return <PostWrapper item={item} />;
+  }, []);
 
   return (
     <View
@@ -24,8 +28,7 @@ const Home = () => {
       <View
         style={{
           paddingHorizontal: 15,
-          // borderWidth: 1,
-          borderColor: 'red',
+          borderColor: 'white',
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
@@ -33,18 +36,56 @@ const Home = () => {
           style={{
             color: color.white,
             fontFamily: Font.SemiBold,
-            fontSize: width * 0.07,
+            fontSize: width * 0.08,
           }}>
           Relo
         </Text>
+        <FastImage
+          source={{uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg'}}
+          resizeMode="contain"
+          style={{
+            width: 45,
+            aspectRatio: 1,
+            borderRadius: 50,
+            borderWidth: 3,
+            borderColor: 'white',
+          }}
+        />
       </View>
+
       {/* carousel */}
       <Carousel
-        width={width * 1}
+        ref={carouselRef}
+        width={width}
         data={data}
         scrollAnimationDuration={1000}
-        renderItem={({item}) => <PostWrapper />}
+        renderItem={renderItem}
+        style={{borderWidth: 0, borderColor: 'white'}}
+        height={550}
+        mode={'horizontal-stack'}
       />
+      <View
+        style={{
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          rowGap: 10,
+        }}>
+        <Image
+          source={{uri: 'https://i.ibb.co/7xMp1Zzn/swipe.png'}}
+          resizeMode="contain"
+          style={{width: width * 0.14, aspectRatio: 1, tintColor: color.Bg}}
+        />
+        <Text
+          style={{
+            color: color.Bg,
+            fontFamily: Font.Medium,
+            fontSize: width * 0.04,
+            letterSpacing: 0.4,
+          }}>
+          swipe to see
+        </Text>
+      </View>
     </View>
   );
 };
