@@ -8,6 +8,8 @@ import {color} from '../Const/Color';
 import Profile from '../Pages/Profile';
 import Post from '../Pages/Post';
 import {Font} from '../Const/Font';
+import SignIn from '../LoginSystem/SignIn';
+import Splash from '../LoginSystem/Splash';
 const {width} = Dimensions.get('window');
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
@@ -79,9 +81,11 @@ const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Tab"
+      initialRouteName="Splash"
       screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Tab" component={TabNavigation} />
+      <Stack.Screen name="SignIn" component={SignIn} />
     </Stack.Navigator>
   );
 };
