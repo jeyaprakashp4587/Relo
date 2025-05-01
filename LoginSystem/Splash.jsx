@@ -8,7 +8,7 @@ const Splash = () => {
   useEffect(() => {
     const AutoLogin = async () => {
       try {
-        const id = await AsyncStorage.getItem('user_uid');
+        const id = await AsyncStorage.getItem('user_id');
         if (id) {
           navigation.replace('Tab');
         } else {

@@ -10,6 +10,7 @@ import Post from '../Pages/Post';
 import {Font} from '../Const/Font';
 import SignIn from '../LoginSystem/SignIn';
 import Splash from '../LoginSystem/Splash';
+import SignupScreen from '../LoginSystem/SignUpScreen';
 const {width} = Dimensions.get('window');
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
@@ -81,11 +82,12 @@ const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Splash"
+      initialRouteName="SignUp"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Tab" component={TabNavigation} />
       <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="SignUp" component={SignupScreen} />
     </Stack.Navigator>
   );
 };

@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "447588547025-thkd40mg81sok4qqb612l9pgdmgjde9h.apps.googleusercontent.com",
+          "client_id": "447588547025-str0h4ukk898n504mekkc5mfnlu8lg90.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.relo",
@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "447588547025-lmolj8v94bujck5urlne3mkc5r7nh3sh.apps.googleusercontent.com",
+          "client_id": "447588547025-nppnlsurlj11cko1rripjgmmu5nhqru6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "447588547025-lmolj8v94bujck5urlne3mkc5r7nh3sh.apps.googleusercontent.com",
+              "client_id": "447588547025-nppnlsurlj11cko1rripjgmmu5nhqru6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
