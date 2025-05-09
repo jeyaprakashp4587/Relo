@@ -73,7 +73,7 @@ const SignIn = () => {
           <TouchableOpacity>
             <Text
               style={{
-                color: color.blue,
+                color: color.black,
                 fontFamily: Font.Medium,
                 textAlign: 'center',
                 letterSpacing: 0.3,
@@ -93,11 +93,9 @@ export default SignIn;
 const styles = StyleSheet.create({
   label: {
     fontSize: width * 0.05,
-
     fontFamily: Font.SemiBold,
     width: '80%',
     color: color.white,
-    // display: 'none',
   },
   input: {
     borderWidth: 0,
