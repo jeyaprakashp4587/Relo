@@ -1,11 +1,14 @@
 import {
   Button,
   Dimensions,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import Navigation from '../Navigation/Navigation';
@@ -13,20 +16,67 @@ import axios from 'axios';
 import {Api} from '../Api/Api';
 import {color} from '../Const/Color';
 import FastImage from 'react-native-fast-image';
-import LinearGradient from 'react-native-linear-gradient';
 import {Font} from '../Const/Font';
+import LinearGradient from 'react-native-linear-gradient';
 const {width, height} = Dimensions.get('window');
-const SignIn = () => {
+
+const SignIn = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Toastand.show({
+        type: 'error',
+        text1: 'Validation Error',
+        text2: 'Both email and password are required.',
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await axios.post(`${Api}/auth/login`, {
+        email,
+        password,
+      });
+      setLoading(false);
+      if (response.data.success) {
+        ToastAndroid.show(
+          {
+            type: 'success',
+            text1: 'Login Successful',
+          },
+          ToastAndroid.SHORT,
+        );
+        navigation.replace('Home');
+      } else {
+        ToastAndroid.show(
+          {
+            type: 'error',
+            text1: 'Login Failed',
+            text2: response.data.message || 'Invalid credentials.',
+          },
+          ToastAndroid.SHORT,
+        );
+      }
+    } catch (error) {
+      setLoading(false);
+      ToastAndroid.show(
+        {
+          type: 'error',
+          text1: 'Network Error',
+          text2: 'Unable to connect to the server.',
+        },
+        ToastAndroid.SHORT,
+      );
+    }
+  };
+
   return (
-    <View style={{backgroundColor: color.black, flex: 1}}>
-      {/* logo */}
-      <View
-        style={{
-          // borderWidth: 1,
-          borderColor: 'red',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+    <ScrollView
+      style={{backgroundColor: color.black, flex: 1, paddingBottom: 20}}>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <FastImage
           source={require('../assets/ic_launcher_round.png')}
           resizeMode="contain"
@@ -34,43 +84,41 @@ const SignIn = () => {
           style={{width: width * 0.75, aspectRatio: 1}}
         />
       </View>
-      {/* Text inputs */}
+
       <View style={{paddingHorizontal: 15, rowGap: 10}}>
         <Text style={styles.label}>Email</Text>
         <TextInput
-          // ref={nameRef}
           style={styles.input}
-          // value={name}
-          // onChangeText={text => {
-          //   setName(text);
-          //   setErrors({...errors, name: ''});
-          // }}
-          placeholder="Enter name"
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Enter email"
           placeholderTextColor="#888"
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
+
         <Text style={styles.label}>Password</Text>
         <TextInput
-          // ref={nameRef}
           style={styles.input}
-          // value={name}
-          // onChangeText={text => {
-          //   setName(text);
-          //   setErrors({...errors, name: ''});
-          // }}
-          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Enter password"
           placeholderTextColor="#888"
+          secureTextEntry
         />
-        <LinearGradient
-          colors={['rgb(17, 66, 129)', 'rgb(9, 52, 102)']}
-          style={styles.button}>
-          <TouchableOpacity>
-            <Text style={styles.buttonText}>signup</Text>
+
+        <LinearGradient colors={['#114281', '#093466']} style={styles.button}>
+          <TouchableOpacity onPress={handleLogin} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text style={styles.buttonText}>Sign In</Text>
+            )}
           </TouchableOpacity>
         </LinearGradient>
-        <LinearGradient
-          colors={['rgb(245, 245, 245)', 'rgb(255, 255, 255)']}
-          style={styles.button}>
-          <TouchableOpacity>
+
+        <LinearGradient colors={['#f5f5f5', '#ffffff']} style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text
               style={{
                 color: color.black,
@@ -79,12 +127,12 @@ const SignIn = () => {
                 letterSpacing: 0.3,
                 fontSize: width * 0.04,
               }}>
-              create new account
+              Create New Account
             </Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -98,7 +146,7 @@ const styles = StyleSheet.create({
     color: color.white,
   },
   input: {
-    borderWidth: 0,
+    borderBottomWidth: 0.5,
     borderColor: '#ccc',
     padding: 10,
     borderRadius: 5,
@@ -106,7 +154,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 20,
     fontFamily: Font.Medium,
-    borderBottomWidth: 0.5,
     fontSize: width * 0.035,
   },
   button: {
