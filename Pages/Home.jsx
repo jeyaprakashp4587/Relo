@@ -5,9 +5,11 @@ import {Font} from '../Const/Font';
 import PostWrapper from '../Components/PostWrapper';
 import Carousel from 'react-native-reanimated-carousel';
 import FastImage from 'react-native-fast-image';
+import {useData} from '../Context/Contexter';
 
 const Home = () => {
   const {width} = Dimensions.get('window');
+  const {user} = useData();
   const data = [
     {title: 'First Item'},
     {title: 'Second Item'},
@@ -17,12 +19,17 @@ const Home = () => {
   const renderItem = useCallback(({item}) => {
     return <PostWrapper item={item} />;
   }, []);
+  console.log(user);
 
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: color.black,
+        // borderWidth: 3,
+        borderColor: 'white',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
       }}>
       {/* Header */}
       <View
@@ -41,10 +48,12 @@ const Home = () => {
           Relo
         </Text>
         <FastImage
-          source={{uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg'}}
-          resizeMode="contain"
+          source={{
+            uri: user?.ProfileImg ?? 'https://i.ibb.co/N2gGTTk/boy2.jpg',
+          }}
+          resizeMode="cover"
           style={{
-            width: 45,
+            width: width * 0.13,
             aspectRatio: 1,
             borderRadius: 50,
             borderWidth: 3,
@@ -70,6 +79,7 @@ const Home = () => {
           justifyContent: 'center',
           alignItems: 'center',
           rowGap: 10,
+          marginTop: 10,
         }}>
         <Image
           source={{uri: 'https://i.ibb.co/7xMp1Zzn/swipe.png'}}

@@ -152,7 +152,7 @@ const PostWrapper = () => {
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: '#274c77',
+              backgroundColor: color.blue,
               borderRadius: 5,
             }}>
             {/* <Image
@@ -313,7 +313,7 @@ const PostWrapper = () => {
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: '#274c77',
+              backgroundColor: color.blue,
               borderRadius: 5,
             }}>
             {/* <Image

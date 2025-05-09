@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
@@ -20,18 +21,24 @@ import {Font} from '../Const/Font';
 import {color} from '../Const/Color';
 import FastImage from 'react-native-fast-image';
 import {launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import {Api} from '../Api/Api';
+import {useNavigation} from '@react-navigation/native';
+import {useData} from '../Context/Contexter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width} = Dimensions.get('window');
 
 const SignupScreen = () => {
+  const navigation = useNavigation();
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({name: '', email: '', password: ''});
-
+  const {user, setUser} = useData();
   const offset = useSharedValue(0);
-
+  const [image, setImage] = useState();
   const goToNextStep = useCallback(() => {
     // valid for username
     if (step === 0 && name.trim() === '') {
@@ -59,12 +66,40 @@ const SignupScreen = () => {
     const nextStep = step + 1;
     setStep(nextStep);
     offset.value = withTiming(-nextStep * width, {duration: 300});
-  }, [step, name, email, password, errors, offset, image]);
-
-  const handleSubmit = useCallback(() => {
-    console.log({name, email, password});
-    // Submit logic here
-  }, [name, email, password, errors]);
+  }, [step, name, email, password, errors, offset]);
+  const [loadSubmit, setLoadSubmit] = useState(false);
+  const handleSubmit = useCallback(async () => {
+    try {
+      setLoadSubmit(true);
+      const {data, status} = await axios.post(`${Api}/Login/signup`, {
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        profile: image,
+      });
+      if (status === 200) {
+        if (data?.message === 'Email has Already Been Taken') {
+          ToastAndroid.show(data?.message, ToastAndroid.SHORT);
+          setLoadSubmit(false);
+          return;
+        }
+        if (data?.message === 'sucess') {
+          await AsyncStorage.setItem('user_id', data.user._id.toString());
+          setUser(data.user);
+          ToastAndroid.show('signup sucessfully', ToastAndroid.SHORT);
+          navigation.navigate('Tab');
+          setLoadSubmit(false);
+        }
+      } else {
+        ToastAndroid.show('something is wrong', ToastAndroid.SHORT);
+        setLoadSubmit(false);
+        navigation.navigate('Tab');
+      }
+    } catch (error) {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+      setLoadSubmit(false);
+    }
+  }, [name, email, password, errors, image]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{translateX: offset.value}],
@@ -82,7 +117,6 @@ const SignupScreen = () => {
     }
   }, [step]);
   // image processing
-  const [image, setImage] = useState();
   const [hostImageIndi, setHostImageIndi] = useState(false);
   const selectImage = useCallback(async () => {
     try {
@@ -92,34 +126,26 @@ const SignupScreen = () => {
         selectionLimit: 1,
       };
       const result = await launchImageLibrary(options);
-      if (result.didCancel) {
-        return;
-      }
-      if (result.errorMessage) {
-        throw new Error(result.errorMessage);
-      }
-      if (result?.assets) {
-        const uploadedImages = await Promise.all(
-          result.assets.map(async asset => {
-            try {
-              return await hostImage(asset.uri).then(img => {
-                if (img) {
-                  setImage(img);
-                  setHostImageIndi(false);
-                  goToNextStep();
-                }
-              });
-            } catch (error) {
-              console.error(`Error uploading image: ${asset.uri}`, error);
-              return null;
-            }
-          }),
-        );
+
+      if (result.didCancel) return;
+      if (result.errorMessage) throw new Error(result.errorMessage);
+
+      if (result?.assets?.length > 0) {
+        const asset = result.assets[0];
+        const imgUrl = await hostImage(asset.uri);
+
+        if (imgUrl) {
+          setImage(imgUrl);
+          setHostImageIndi(false);
+          const nextStep = step + 1;
+          setStep(nextStep);
+          offset.value = withTiming(-nextStep * width, {duration: 300});
+        }
       }
     } catch (error) {
-      console.log(error);
+      console.log('Image select/upload error:', error);
     }
-  }, [image]);
+  }, [hostImage, image, step, password]);
   const hostImage = useCallback(async imageUri => {
     try {
       setHostImageIndi(true);
@@ -250,6 +276,7 @@ const SignupScreen = () => {
                 borderRadius: 2000,
                 borderWidth: image ? 1 : 0,
                 borderColor: 'white',
+                alignSelf: 'center',
               }}
             />
           </View>
@@ -268,7 +295,6 @@ const SignupScreen = () => {
         {/* complete */}
         <View style={styles.step}>
           <View style={styles.content}>
-            <Text style={styles.label}>Your profile</Text>
             <View
               style={{
                 // flexDirection: 'row',
@@ -319,8 +345,8 @@ const SignupScreen = () => {
           <LinearGradient
             colors={['rgb(17, 66, 129)', 'rgb(9, 52, 102)']}
             style={styles.button}>
-            <TouchableOpacity onPress={selectImage}>
-              {hostImageIndi ? (
+            <TouchableOpacity onPress={handleSubmit}>
+              {loadSubmit ? (
                 <ActivityIndicator color={color.white} size={28} />
               ) : (
                 <Text style={styles.buttonText}>complete</Text>
@@ -330,7 +356,7 @@ const SignupScreen = () => {
         </View>
       </Animated.View>
       {/* Pagination Dots */}
-      {step <= 3 && <PaginationDots stepOffset={offset} />}
+      <PaginationDots stepOffset={offset} />
     </View>
   );
 };
@@ -387,14 +413,14 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     width: '100%',
   },
   label: {
     fontSize: width * 0.09,
     marginBottom: 10,
     fontFamily: Font.SemiBold,
-    width: '100%',
+    width: '80%',
     color: color.white,
   },
   input: {
