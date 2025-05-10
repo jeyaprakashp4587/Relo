@@ -18,6 +18,7 @@ import {color} from '../Const/Color';
 import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const {width, height} = Dimensions.get('window');
 
 const SignIn = ({navigation}) => {
@@ -25,57 +26,66 @@ const SignIn = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Toastand.show({
-        type: 'error',
-        text1: 'Validation Error',
-        text2: 'Both email and password are required.',
-      });
-      return;
-    }
+  const handleLogin = useCallback(async () => {
     try {
-      setLoading(true);
-      const response = await axios.post(`${Api}/auth/login`, {
-        email,
-        password,
-      });
-      setLoading(false);
-      if (response.data.success) {
+      // Validate input early to avoid unnecessary network requests
+      if (loading) return;
+      if (!email.trim() || !password.trim()) {
         ToastAndroid.show(
-          {
-            type: 'success',
-            text1: 'Login Successful',
-          },
+          'Both email and password are required.',
           ToastAndroid.SHORT,
         );
-        navigation.replace('Home');
+        return;
+      }
+
+      setLoading(true);
+
+      // Send the login request
+      const response = await axios.post(`${Api}/Login/signIn`, {
+        Email: email.trim(),
+        Password: password.trim(),
+      });
+
+      // Handle successful login
+      if (response.status === 200) {
+        ToastAndroid.show('Login Successful', ToastAndroid.SHORT);
+        await AsyncStorage.setItem('user_id', response.data.userId.toString());
+        navigation.replace('Tab');
+      }
+    } catch (error) {
+      // Handle different error cases
+      if (error.response) {
+        const {status, data} = error.response;
+        if (status === 401 || status === 404) {
+          ToastAndroid.show(
+            data.message || 'Email or Password is incorrect.',
+            ToastAndroid.SHORT,
+          );
+        } else if (status === 400) {
+          ToastAndroid.show(data.error || 'Invalid input.', ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show('Unexpected server error.', ToastAndroid.SHORT);
+        }
       } else {
+        // Network or other unexpected errors
         ToastAndroid.show(
-          {
-            type: 'error',
-            text1: 'Login Failed',
-            text2: response.data.message || 'Invalid credentials.',
-          },
+          'Network error. Please try again later.',
           ToastAndroid.SHORT,
         );
       }
-    } catch (error) {
+    } finally {
       setLoading(false);
-      ToastAndroid.show(
-        {
-          type: 'error',
-          text1: 'Network Error',
-          text2: 'Unable to connect to the server.',
-        },
-        ToastAndroid.SHORT,
-      );
     }
-  };
+  }, [email, password]);
 
   return (
     <ScrollView
-      style={{backgroundColor: color.black, flex: 1, paddingBottom: 20}}>
+      style={{
+        backgroundColor: color.black,
+        flex: 1,
+        paddingBottom: 20,
+        padding: 0,
+      }}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <FastImage
           source={require('../assets/ic_launcher_round.png')}
@@ -85,7 +95,7 @@ const SignIn = ({navigation}) => {
         />
       </View>
 
-      <View style={{paddingHorizontal: 15, rowGap: 10}}>
+      <View style={{paddingHorizontal: 25, rowGap: 10}}>
         <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
@@ -110,7 +120,7 @@ const SignIn = ({navigation}) => {
         <LinearGradient colors={['#114281', '#093466']} style={styles.button}>
           <TouchableOpacity onPress={handleLogin} disabled={loading}>
             {loading ? (
-              <ActivityIndicator color="white" />
+              <ActivityIndicator color="white" size={28} />
             ) : (
               <Text style={styles.buttonText}>Sign In</Text>
             )}
@@ -155,6 +165,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontFamily: Font.Medium,
     fontSize: width * 0.035,
+    paddingLeft: 0,
   },
   button: {
     padding: 10,

@@ -1,14 +1,17 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import {Api} from '../Api/Api';
 import {useData} from '../Context/Contexter';
+import FastImage from 'react-native-fast-image';
+import {color} from '../Const/Color';
 
 const Splash = () => {
   const navigation = useNavigation();
   const {setUser} = useData();
+  const {width, height} = Dimensions.get('window');
   useEffect(() => {
     const AutoLogin = async () => {
       try {
@@ -31,12 +34,21 @@ const Splash = () => {
     AutoLogin();
   }, []);
   return (
-    <View>
-      <Text>Splash</Text>
+    <View
+      style={{
+        backgroundColor: color.black,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <FastImage
+        source={require('../assets/ic_launcher_round.png')}
+        style={{width: width * 0.8, aspectRatio: 1}}
+        priority={FastImage.priority.high}
+        resizeMode="contain"
+      />
     </View>
   );
 };
-
 export default Splash;
-
 const styles = StyleSheet.create({});
