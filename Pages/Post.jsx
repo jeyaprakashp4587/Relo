@@ -69,9 +69,11 @@ const Post = () => {
         <Text
           style={{
             color: color.white,
-            fontSize: width * 0.08,
+            fontSize: width * 0.1,
             width: '70%',
             fontFamily: Font.SemiBold,
+            marginBottom: 50,
+            letterSpacing: 0.3,
           }}>
           Upload your photo
         </Text>

@@ -27,11 +27,39 @@ const PostWrapper = () => {
   return (
     <View
       style={{
-        // borderWidth: 5,
         borderColor: 'white',
-        height: height * 0.6,
         marginVertical: 'auto',
+        width: width * 0.9,
+        alignSelf: 'center',
+        height: height * 0.53,
+        backgroundColor: color.black,
       }}>
+      {/* show dominator */}
+      <LinearGradient
+        colors={[color.blue, 'rgba(0, 0, 0, 0.09)']}
+        style={{
+          padding: 10,
+          flexDirection: 'row',
+          alignItems: 'center',
+          columnGap: 5,
+        }}
+        start={{x: 0, y: 1}}
+        end={{x: 1, y: 0}}>
+        <FastImage
+          source={{uri: 'https://i.ibb.co/zWW0wqG0/security.png'}}
+          resizeMode="contain"
+          priority={FastImage.priority.high}
+          style={{width: 20, aspectRatio: 1}}
+        />
+        <Text
+          style={{
+            color: color.white,
+            fontFamily: Font.SemiBold,
+            letterSpacing: 0.4,
+          }}>
+          Dominator: Jeya Prakash
+        </Text>
+      </LinearGradient>
       {/* first user */}
       <View
         style={{
@@ -47,7 +75,13 @@ const PostWrapper = () => {
               priority: FastImage.priority.high,
             }}
             resizeMode="cover"
-            style={{width: '100%', height: '100%', borderRadius: 10}}
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: 10,
+              borderBottomRightRadius: 0,
+              borderTopLeftRadius: 0,
+            }}
           />
         </View>
         <View
@@ -78,12 +112,16 @@ const PostWrapper = () => {
                 priority: FastImage.priority.high,
               }}
               resizeMode="contain"
-              style={{width: 30, aspectRatio: 1, borderRadius: 50}}
+              style={{
+                width: 30,
+                aspectRatio: 1,
+                borderRadius: 50,
+              }}
             />
             <Text
               style={{
                 color: color.white,
-                fontFamily: Font.Regular,
+                fontFamily: Font.SemiBold,
                 fontSize: width * 0.036,
                 letterSpacing: 0.2,
               }}>
@@ -102,6 +140,7 @@ const PostWrapper = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                rowGap: 2,
               }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
@@ -117,6 +156,7 @@ const PostWrapper = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                rowGap: 2,
               }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
@@ -132,6 +172,7 @@ const PostWrapper = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                rowGap: 2,
               }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
@@ -144,7 +185,6 @@ const PostWrapper = () => {
             </View>
           </View>
           {/* vote button */}
-
           <TouchableOpacity
             style={{
               padding: 5,
@@ -152,8 +192,8 @@ const PostWrapper = () => {
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: color.blue,
-              borderRadius: 5,
+              backgroundColor: color.white,
+              borderRadius: 50,
             }}>
             {/* <Image
                 source={{uri: 'https://i.ibb.co/60TH14Kx/paws.png'}}
@@ -162,7 +202,7 @@ const PostWrapper = () => {
               /> */}
             <Text
               style={{
-                color: color.white,
+                color: color.black,
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
@@ -172,30 +212,6 @@ const PostWrapper = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
-      {/* center label */}
-      <View
-        style={{
-          width: 35,
-          aspectRatio: 1,
-          backgroundColor: color.white,
-          position: 'absolute',
-          zIndex: 10,
-          alignSelf: 'center',
-          marginVertical: 'auto',
-          top: '45%',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 50,
-        }}>
-        <FastImage
-          source={{
-            uri: 'https://i.ibb.co/ZR9L9NWc/radiation.png',
-            priority: FastImage.priority.high,
-          }}
-          style={{width: 24, aspectRatio: 1}}
-          resizeMethod="resize"
-        />
       </View>
       {/* second user */}
       <View
@@ -209,7 +225,12 @@ const PostWrapper = () => {
               uri: 'https://i.ibb.co/8gPTcpK/girl1.jpg',
               priority: FastImage.priority.high,
             }}
-            style={{width: '100%', height: '100%', borderRadius: 10}}
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: 10,
+              borderTopLeftRadius: 0,
+            }}
           />
         </View>
         <View
@@ -245,7 +266,7 @@ const PostWrapper = () => {
             <Text
               style={{
                 color: color.white,
-                fontFamily: Font.Regular,
+                fontFamily: Font.SemiBold,
                 fontSize: width * 0.036,
                 letterSpacing: 0.2,
               }}>
@@ -264,6 +285,7 @@ const PostWrapper = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                rowGap: 2,
               }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
@@ -279,6 +301,7 @@ const PostWrapper = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                rowGap: 2,
               }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
@@ -294,6 +317,7 @@ const PostWrapper = () => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                rowGap: 2,
               }}>
               <FastImage
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
@@ -313,8 +337,8 @@ const PostWrapper = () => {
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: color.blue,
-              borderRadius: 5,
+              backgroundColor: color.white,
+              borderRadius: 50,
             }}>
             {/* <Image
                 source={{uri: 'https://i.ibb.co/60TH14Kx/paws.png'}}
@@ -323,7 +347,7 @@ const PostWrapper = () => {
               /> */}
             <Text
               style={{
-                color: color.white,
+                color: color.black,
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
