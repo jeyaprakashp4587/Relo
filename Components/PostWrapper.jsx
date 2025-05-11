@@ -1,12 +1,13 @@
 import {
   Dimensions,
   Image,
+  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {color} from '../Const/Color';
 import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
@@ -24,6 +25,7 @@ const PostWrapper = () => {
     'https://i.ibb.co/8gPTcpK/girl1.jpg',
     'https://i.ibb.co/s2bB4yj/girl3.jpg',
   ];
+  const [isShowModel, setIsShowModel] = useState(false);
   return (
     <View
       style={{
@@ -69,20 +71,22 @@ const PostWrapper = () => {
           flex: 1,
         }}>
         <View style={{borderWidth: 0, borderColor: 'red', width: '50%'}}>
-          <FastImage
-            source={{
-              uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg',
-              priority: FastImage.priority.high,
-            }}
-            resizeMode="cover"
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 10,
-              borderBottomRightRadius: 0,
-              borderTopLeftRadius: 0,
-            }}
-          />
+          <TouchableOpacity>
+            <FastImage
+              source={{
+                uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg',
+                priority: FastImage.priority.high,
+              }}
+              resizeMode="cover"
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 10,
+                borderBottomRightRadius: 0,
+                borderTopLeftRadius: 0,
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -195,11 +199,6 @@ const PostWrapper = () => {
               backgroundColor: color.white,
               borderRadius: 50,
             }}>
-            {/* <Image
-                source={{uri: 'https://i.ibb.co/60TH14Kx/paws.png'}}
-                style={{width: 13, aspectRatio: 1, tintColor: 'white'}}
-                resizeMode="contain"
-              /> */}
             <Text
               style={{
                 color: color.black,
@@ -220,18 +219,20 @@ const PostWrapper = () => {
           flex: 1,
         }}>
         <View style={{borderWidth: 0, borderColor: 'red', width: '50%'}}>
-          <FastImage
-            source={{
-              uri: 'https://i.ibb.co/8gPTcpK/girl1.jpg',
-              priority: FastImage.priority.high,
-            }}
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 10,
-              borderTopLeftRadius: 0,
-            }}
-          />
+          <TouchableOpacity onPress={() => setIsShowModel(true)}>
+            <FastImage
+              source={{
+                uri: 'https://i.ibb.co/8gPTcpK/girl1.jpg',
+                priority: FastImage.priority.high,
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 10,
+                borderTopLeftRadius: 0,
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -358,6 +359,51 @@ const PostWrapper = () => {
           </TouchableOpacity>
         </View>
       </View>
+      {/* model for sho user clicked image for larger view */}
+      <Modal transparent={true} visible={isShowModel}>
+        <View
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.48)',
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            rowGap: 20,
+          }}>
+          <FastImage
+            source={{
+              uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg',
+              priority: FastImage.priority.high,
+            }}
+            resizeMode="contain"
+            style={{
+              width: width * 0.9,
+              aspectRatio: 1,
+            }}
+          />
+          <TouchableOpacity
+            style={{
+              padding: 15,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              columnGap: 5,
+              backgroundColor: color.blue,
+              borderRadius: 50,
+              width: '90%',
+            }}>
+            <Text
+              style={{
+                color: color.white,
+                textAlign: 'center',
+                fontFamily: Font.SemiBold,
+                fontSize: width * 0.032,
+                letterSpacing: 0.3,
+              }}>
+              close
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
