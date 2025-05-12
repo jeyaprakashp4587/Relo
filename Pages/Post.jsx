@@ -4,17 +4,22 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {color} from '../Const/Color';
 import {Font} from '../Const/Font';
-
 import FastImage from 'react-native-fast-image';
 import {launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import {Api} from '../Api/Api';
+import {useData} from '../Context/Contexter';
+
 const Post = () => {
   const {width, height} = Dimensions.get('window');
+  const {user, setUser} = useData();
   // select image from user device
   const [image, setImage] = useState();
   const [isShowPostButton, setIsShowPostButton] = useState(false);
@@ -62,6 +67,20 @@ const Post = () => {
       throw error;
     }
   }, []);
+  const uploadPost = useCallback(async () => {
+    try {
+      const {status, data} = await axios.post(`${Api}/Post/uploadPost`, {
+        userId: user?._id,
+        Image: image,
+      });
+      if (status === 200) {
+        ToastAndroid.show('upload successfully', ToastAndroid.SHORT);
+        setUser({...prev, Posts: data?.newPost});
+      }
+    } catch (error) {
+      ToastAndroid.show('error on upload', ToastAndroid.SHORT);
+    }
+  }, [image, user]);
   return (
     <ScrollView
       style={{backgroundColor: color.black, flex: 1, paddingHorizontal: 15}}>
