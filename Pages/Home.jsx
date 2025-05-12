@@ -6,9 +6,11 @@ import PostWrapper from '../Components/PostWrapper';
 import Carousel from 'react-native-reanimated-carousel';
 import FastImage from 'react-native-fast-image';
 import {useData} from '../Context/Contexter';
+import {useNavigation} from '@react-navigation/native';
 
 const Home = () => {
   const {width} = Dimensions.get('window');
+  const navigation = useNavigation();
   const {user} = useData();
   const data = [
     {title: 'First Item'},
@@ -47,19 +49,21 @@ const Home = () => {
           }}>
           Relo
         </Text>
-        <FastImage
-          source={{
-            uri: user?.ProfileImg ?? 'https://i.ibb.co/N2gGTTk/boy2.jpg',
-          }}
-          resizeMode="cover"
-          style={{
-            width: width * 0.13,
-            aspectRatio: 1,
-            borderRadius: 50,
-            borderWidth: 3,
-            borderColor: 'white',
-          }}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <FastImage
+            source={{
+              uri: user?.ProfileImg ?? 'https://i.ibb.co/N2gGTTk/boy2.jpg',
+            }}
+            resizeMode="cover"
+            style={{
+              width: width * 0.13,
+              aspectRatio: 1,
+              borderRadius: 50,
+              borderWidth: 3,
+              borderColor: 'white',
+            }}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* carousel */}

@@ -71,7 +71,7 @@ const PostWrapper = () => {
           flex: 1,
         }}>
         <View style={{borderWidth: 0, borderColor: 'red', width: '50%'}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setIsShowModel(true)}>
             <FastImage
               source={{
                 uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg',
@@ -341,11 +341,6 @@ const PostWrapper = () => {
               backgroundColor: color.white,
               borderRadius: 50,
             }}>
-            {/* <Image
-                source={{uri: 'https://i.ibb.co/60TH14Kx/paws.png'}}
-                style={{width: 13, aspectRatio: 1, tintColor: 'white'}}
-                resizeMode="contain"  447588547025-lmolj8v94bujck5urlne3mkc5r7nh3sh.apps.googleusercontent.com
-              /> */}
             <Text
               style={{
                 color: color.black,
@@ -363,7 +358,7 @@ const PostWrapper = () => {
       <Modal transparent={true} visible={isShowModel}>
         <View
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.48)',
+            backgroundColor: 'rgba(0, 0, 0, 0.89)',
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -381,6 +376,7 @@ const PostWrapper = () => {
             }}
           />
           <TouchableOpacity
+            onPress={() => setIsShowModel(false)}
             style={{
               padding: 15,
               flexDirection: 'row',
@@ -396,7 +392,7 @@ const PostWrapper = () => {
                 color: color.white,
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
-                fontSize: width * 0.032,
+                fontSize: width * 0.035,
                 letterSpacing: 0.3,
               }}>
               close
