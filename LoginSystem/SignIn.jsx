@@ -19,12 +19,14 @@ import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useData} from '../Context/Contexter';
 const {width, height} = Dimensions.get('window');
 
 const SignIn = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const {setUser} = useData();
 
   const handleLogin = useCallback(async () => {
     try {
@@ -37,19 +39,20 @@ const SignIn = ({navigation}) => {
         );
         return;
       }
-
       setLoading(true);
-
       // Send the login request
       const response = await axios.post(`${Api}/Login/signIn`, {
         Email: email.trim(),
         Password: password.trim(),
       });
-
       // Handle successful login
       if (response.status === 200) {
         ToastAndroid.show('Login Successful', ToastAndroid.SHORT);
-        await AsyncStorage.setItem('user_id', response.data.userId.toString());
+        await AsyncStorage.setItem(
+          'user_id',
+          response.data.user?._id.toString(),
+        );
+        setUser(response.data?.user);
         navigation.replace('Tab');
       }
     } catch (error) {

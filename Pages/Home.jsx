@@ -21,7 +21,6 @@ const Home = () => {
   const renderItem = useCallback(({item}) => {
     return <PostWrapper item={item} />;
   }, []);
-  console.log(user);
 
   return (
     <View

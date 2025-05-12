@@ -16,7 +16,7 @@ const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
-      initialRouteName="Post"
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -82,7 +82,7 @@ const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Tab"
+      initialRouteName="Splash"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Tab" component={TabNavigation} />

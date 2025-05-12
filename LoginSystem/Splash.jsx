@@ -21,7 +21,6 @@ const Splash = () => {
           const {status, data} = await axios(`${Api}/Login/getUser/${id}`);
           if (status === 200) {
             setUser(data.user);
-            console.log(data.user);
             navigation.replace('Tab');
           }
         } else {

@@ -72,7 +72,7 @@ const Post = () => {
             fontSize: width * 0.1,
             width: '70%',
             fontFamily: Font.SemiBold,
-            marginBottom: 50,
+            marginBottom: 20,
             letterSpacing: 0.3,
           }}>
           Upload your photo
@@ -87,27 +87,30 @@ const Post = () => {
               borderColor: 'red',
               borderRadius: 10,
               alignSelf: 'center',
-              marginVertical: 30,
+              marginVertical: 20,
               overflow: 'hidden',
               justifyContent: 'center',
             }}>
             <ActivityIndicator color={color.white} size={100} />
           </View>
         )}
-        {image && (
+        {!loadImage && (
           <View
             style={{
-              width: width * 0.8,
+              width: width * 0.9,
               aspectRatio: 1,
-              // borderWidth: 2,
               borderColor: 'red',
               borderRadius: 10,
               alignSelf: 'center',
-              marginVertical: 30,
+              marginVertical: 20,
               overflow: 'hidden',
             }}>
             <FastImage
-              source={{uri: image}}
+              source={{
+                uri:
+                  image ??
+                  'https://i.ibb.co/gFZm4vmK/close-up-gibbon-nature.jpg',
+              }}
               resizeMode="cover"
               priority={FastImage.priority.high}
               style={{width: '100%', height: '100%'}}
