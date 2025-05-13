@@ -157,6 +157,7 @@ const Post = () => {
         )}
         {isShowPostButton && (
           <TouchableOpacity
+            onPress={uploadPost}
             style={{
               backgroundColor: color.blue,
               padding: 15,

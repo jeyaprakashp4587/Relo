@@ -40,15 +40,16 @@ const Home = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text
+        <FastImage
+          source={require('../assets/ic_launcher_round.png')}
+          resizeMode="cover"
+          priority={FastImage.priority.high}
           style={{
-            color: color.white,
-            fontFamily: Font.SemiBold,
-            fontSize: width * 0.08,
-          }}>
-          Relo
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            width: width * 0.18,
+            aspectRatio: 1,
+          }}
+        />
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
             source={{
               uri: user?.ProfileImg ?? 'https://i.ibb.co/N2gGTTk/boy2.jpg',
@@ -62,7 +63,7 @@ const Home = () => {
               borderColor: 'white',
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* carousel */}
