@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Dimensions, Text, View, TouchableOpacity, Image} from 'react-native';
 import {color} from '../Const/Color';
 import {Font} from '../Const/Font';
@@ -7,6 +7,8 @@ import Carousel from 'react-native-reanimated-carousel';
 import FastImage from 'react-native-fast-image';
 import {useData} from '../Context/Contexter';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import {Api} from '../Api/Api';
 
 const Home = () => {
   const {width} = Dimensions.get('window');
@@ -21,7 +23,18 @@ const Home = () => {
   const renderItem = useCallback(({item}) => {
     return <PostWrapper item={item} />;
   }, []);
-
+  // get the random post
+  const getRandom = useCallback(async () => {
+    try {
+      const {data, status} = await axios.get(`${Api}/Post/getRandomPair`);
+      if (status === 200) {
+        console.log(data);
+      }
+    } catch (error) {}
+  }, [user]);
+  useEffect(() => {
+    getRandom();
+  }, []);
   return (
     <View
       style={{
@@ -36,20 +49,12 @@ const Home = () => {
       <View
         style={{
           paddingHorizontal: 15,
-          borderColor: 'white',
+          // borderColor: 'red',
           flexDirection: 'row',
           justifyContent: 'space-between',
+          // borderWidth: 1,
         }}>
-        <FastImage
-          source={require('../assets/ic_launcher_round.png')}
-          resizeMode="cover"
-          priority={FastImage.priority.high}
-          style={{
-            width: width * 0.18,
-            aspectRatio: 1,
-          }}
-        />
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
             source={{
               uri: user?.ProfileImg ?? 'https://i.ibb.co/N2gGTTk/boy2.jpg',
@@ -63,9 +68,8 @@ const Home = () => {
               borderColor: 'white',
             }}
           />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
-
       {/* carousel */}
       <Carousel
         ref={carouselRef}

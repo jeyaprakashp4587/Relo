@@ -5,9 +5,11 @@ import {Font} from '../Const/Font';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import Skeleton from '../skeleton/Skeleton';
+import {useData} from '../Context/Contexter';
 
 const Profile = () => {
   const {width, height} = Dimensions.get('window');
+  const {user} = useData();
   return (
     <View style={{backgroundColor: color.black, flex: 1}}>
       <Text
@@ -110,48 +112,48 @@ const Profile = () => {
             rowGap: 10,
             paddingHorizontal: 15,
           }}>
-          {Array.from({length: 3}).map((t, index) => (
-            // <TouchableOpacity
-            //   key={index}
-            //   style={{borderRadius: 5, overflow: 'hidden'}}>
-            //   <FastImage
-            //     source={{
-            //       uri: 'https://i.ibb.co/8gPTcpK/girl1.jpg',
-            //       priority: FastImage.priority.high,
-            //     }}
-            //     resizeMode="contain"
-            //     style={{
-            //       width: width * 0.45,
-            //       aspectRatio: 1,
-            //       borderRadius: 5,
-            //     }}
-            //   />
-            //   {/* show dominator */}
-            //   <LinearGradient
-            //     colors={[color.blue, 'rgba(0, 0, 0, 0.09)']}
-            //     style={{
-            //       padding: 10,
-            //       flexDirection: 'row',
-            //       alignItems: 'center',
-            //       columnGap: 5,
-            //       position: 'absolute',
-            //       width: '100%',
-            //       bottom: 0,
-            //     }}
-            //     start={{x: 0, y: 1}}
-            //     end={{x: 1, y: 0}}>
-            //     <Text
-            //       style={{
-            //         color: color.white,
-            //         fontFamily: Font.Medium,
-            //         letterSpacing: 0.4,
-            //         fontSize: width * 0.025,
-            //       }}>
-            //       Dominated
-            //     </Text>
-            //   </LinearGradient>
-            // </TouchableOpacity>
-            <Skeleton width={width * 0.45} height={height * 0.25} radius={10} />
+          {user?.Post?.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={{borderRadius: 5, overflow: 'hidden'}}>
+              <FastImage
+                source={{
+                  uri: item?.PostImage,
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode="contain"
+                style={{
+                  width: width * 0.45,
+                  aspectRatio: 1,
+                  borderRadius: 5,
+                }}
+              />
+              {/* show dominator */}
+              <LinearGradient
+                colors={[color.blue, 'rgba(0, 0, 0, 0.09)']}
+                style={{
+                  padding: 10,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  columnGap: 5,
+                  position: 'absolute',
+                  width: '100%',
+                  bottom: 0,
+                }}
+                start={{x: 0, y: 1}}
+                end={{x: 1, y: 0}}>
+                <Text
+                  style={{
+                    color: color.white,
+                    fontFamily: Font.Medium,
+                    letterSpacing: 0.4,
+                    fontSize: width * 0.025,
+                  }}>
+                  Dominated
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+            // <Skeleton width={width * 0.45} height={height * 0.25} radius={10} />
           ))}
         </View>
       </View>

@@ -67,18 +67,26 @@ const Post = () => {
       throw error;
     }
   }, []);
+  const [uploadIndi, setUploadIndi] = useState(false);
   const uploadPost = useCallback(async () => {
     try {
+      setUploadIndi(true);
       const {status, data} = await axios.post(`${Api}/Post/uploadPost`, {
         userId: user?._id,
         Image: image,
       });
       if (status === 200) {
         ToastAndroid.show('upload successfully', ToastAndroid.SHORT);
+        setImage('');
+        setIsShowPostButton(false);
         setUser({...prev, Posts: data?.newPost});
+        setUploadIndi(false);
       }
     } catch (error) {
-      ToastAndroid.show('error on upload', ToastAndroid.SHORT);
+      setUploadIndi(false);
+      setImage(false);
+      setIsShowPostButton(false);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
     }
   }, [image, user]);
   return (
@@ -157,21 +165,26 @@ const Post = () => {
         )}
         {isShowPostButton && (
           <TouchableOpacity
+            disabled={uploadIndi}
             onPress={uploadPost}
             style={{
               backgroundColor: color.blue,
               padding: 15,
               borderRadius: 50,
             }}>
-            <Text
-              style={{
-                color: color.white,
-                fontSize: width * 0.038,
-                fontFamily: Font.Medium,
-                textAlign: 'center',
-              }}>
-              upload
-            </Text>
+            {uploadIndi ? (
+              <ActivityIndicator size={29} />
+            ) : (
+              <Text
+                style={{
+                  color: color.white,
+                  fontSize: width * 0.038,
+                  fontFamily: Font.Medium,
+                  textAlign: 'center',
+                }}>
+                upload
+              </Text>
+            )}
           </TouchableOpacity>
         )}
       </View>
