@@ -77,14 +77,14 @@ const Post = () => {
       });
       if (status === 200) {
         ToastAndroid.show('upload successfully', ToastAndroid.SHORT);
-        setImage('');
+        setImage('https://i.ibb.co/gFZm4vmK/close-up-gibbon-nature.jpg');
         setIsShowPostButton(false);
         setUser({...prev, Posts: data?.newPost});
         setUploadIndi(false);
       }
     } catch (error) {
+      setImage('https://i.ibb.co/gFZm4vmK/close-up-gibbon-nature.jpg');
       setUploadIndi(false);
-      setImage(false);
       setIsShowPostButton(false);
       ToastAndroid.show(error, ToastAndroid.SHORT);
     }

@@ -1,4 +1,4 @@
-import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, Dimensions, TouchableOpacity, FlatList} from 'react-native';
 import React from 'react';
 import {color} from '../Const/Color';
 import {Font} from '../Const/Font';
@@ -76,11 +76,12 @@ const Profile = () => {
       <TouchableOpacity
         style={{
           borderWidth: 0.5,
-          borderColor: color.white,
+          // borderColor: color.white,
           padding: 10,
           marginVertical: 15,
           marginHorizontal: 15,
           borderRadius: 90,
+          backgroundColor: color.blue,
         }}>
         <Text
           style={{
@@ -94,69 +95,92 @@ const Profile = () => {
         </Text>
       </TouchableOpacity>
       {/*show all posts */}
-      <View style={{borderWidth: 0, borderColor: color.blue, flex: 1}}>
-        <Text
-          style={{
-            paddingHorizontal: 15,
-            color: color.white,
-            fontFamily: Font.Medium,
-            fontSize: width * 0.055,
-          }}>
-          uploads
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            rowGap: 10,
-            paddingHorizontal: 15,
-          }}>
-          {user?.Post?.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={{borderRadius: 5, overflow: 'hidden'}}>
-              <FastImage
-                source={{
-                  uri: item?.PostImage,
-                  priority: FastImage.priority.high,
-                }}
-                resizeMode="contain"
-                style={{
-                  width: width * 0.45,
-                  aspectRatio: 1,
-                  borderRadius: 5,
-                }}
-              />
-              {/* show dominator */}
-              <LinearGradient
-                colors={[color.blue, 'rgba(0, 0, 0, 0.09)']}
-                style={{
-                  padding: 10,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  columnGap: 5,
-                  position: 'absolute',
-                  width: '100%',
-                  bottom: 0,
-                }}
-                start={{x: 0, y: 1}}
-                end={{x: 1, y: 0}}>
-                <Text
-                  style={{
-                    color: color.white,
-                    fontFamily: Font.Medium,
-                    letterSpacing: 0.4,
-                    fontSize: width * 0.025,
-                  }}>
-                  Dominated
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            // <Skeleton width={width * 0.45} height={height * 0.25} radius={10} />
-          ))}
+      {user?.Post?.length > 0 ? (
+        <View style={{borderWidth: 0, borderColor: color.blue, flex: 1}}>
+          <Text
+            style={{
+              paddingHorizontal: 15,
+              color: color.white,
+              fontFamily: Font.Medium,
+              fontSize: width * 0.055,
+              paddingBottom: 10,
+            }}>
+            uploads
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              rowGap: 10,
+              paddingHorizontal: 15,
+            }}>
+            <FlatList
+              data={user?.Post}
+              renderItem={({item, index}) => (
+                <TouchableOpacity
+                  key={index}
+                  style={{borderRadius: 5, overflow: 'hidden'}}>
+                  <FastImage
+                    source={{
+                      uri: item?.PostImage,
+                      priority: FastImage.priority.high,
+                    }}
+                    resizeMode="contain"
+                    style={{
+                      width: width * 0.45,
+                      aspectRatio: 1,
+                      borderRadius: 5,
+                    }}
+                  />
+                  {/* show dominator */}
+                  <LinearGradient
+                    colors={[
+                      item?.PostStatus == 'Tied'
+                        ? 'rgb(185, 104, 57)'
+                        : item?.PostStatus == 'Dominated'
+                        ? color.blue
+                        : 'rgb(102, 116, 22)',
+                      'rgba(0, 0, 0, 0.09)',
+                    ]}
+                    style={{
+                      padding: 10,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      columnGap: 5,
+                      position: 'absolute',
+                      width: '100%',
+                      bottom: 0,
+                    }}
+                    start={{x: 0, y: 1}}
+                    end={{x: 1, y: 0}}>
+                    <Text
+                      style={{
+                        color: color.white,
+                        fontFamily: Font.Medium,
+                        letterSpacing: 0.4,
+                        fontSize: width * 0.025,
+                      }}>
+                      {item?.PostStatus}
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
         </View>
-      </View>
+      ) : (
+        <View>
+          <Text
+            style={{
+              color: color.white,
+              fontFamily: Font.Medium,
+              textAlign: 'center',
+            }}>
+            No more posts
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

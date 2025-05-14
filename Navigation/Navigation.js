@@ -11,7 +11,7 @@ import {Font} from '../Const/Font';
 import SignIn from '../LoginSystem/SignIn';
 import Splash from '../LoginSystem/Splash';
 import SignupScreen from '../LoginSystem/SignUpScreen';
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
   return (
@@ -20,20 +20,17 @@ const TabNavigation = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: color.black,
-          // borderTopWidth: 0.25,
-          borderColor: 'rgba(255, 255, 255, 0.14)',
+          backgroundColor: color.white,
+          borderTopWidth: 5,
+          borderColor: 'white',
+          height: height * 0.075,
         },
         tabBarItemStyle: {
           flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
         },
-        tabBarLabelStyle: {
-          fontFamily: Font.Regular,
-          color: color.white,
-          fontSize: width * 0.02,
-        },
+        tabBarShowLabel: false,
       }}>
       <Tab.Screen
         name="Home"
@@ -42,7 +39,7 @@ const TabNavigation = () => {
           tabBarIcon: () => (
             <Image
               source={{uri: 'https://i.ibb.co/DD0gmYp/home.png'}}
-              style={{width: 20, aspectRatio: 1, tintColor: 'white'}}
+              style={{width: 27, aspectRatio: 1}}
             />
           ),
           // tabBarShowLabel: false,
@@ -56,10 +53,22 @@ const TabNavigation = () => {
           tabBarIcon: () => (
             <Image
               source={{uri: 'https://i.ibb.co/WWg5vdF/plus.png'}}
-              style={{width: 20, aspectRatio: 1, tintColor: 'white'}}
+              style={{width: 25, aspectRatio: 1, tintColor: 'black'}}
             />
           ),
-          // tabBarShowLabel: false,
+          // tabBarIconStyle: {
+          //   position: 'absolute',
+          //   top: -43,
+          //   backgroundColor: 'black',
+          //   borderWidth: 5,
+          //   borderRadius: 50,
+          //   width: 70,
+          //   height: 70,
+          // },
+          // tabBarItemStyle: {
+          //   justifyContent: 'center',
+          //   alignItems: 'center',
+          // },
         }}
       />
       <Tab.Screen
@@ -69,7 +78,7 @@ const TabNavigation = () => {
           tabBarIcon: () => (
             <Image
               source={{uri: 'https://i.ibb.co/9Vck1rW/people.png'}}
-              style={{width: 23, aspectRatio: 1, tintColor: 'white'}}
+              style={{width: 30, aspectRatio: 1}}
             />
           ),
           // tabBarShowLabel: false,

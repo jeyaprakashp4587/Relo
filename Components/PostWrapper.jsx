@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {color} from '../Const/Color';
 import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
@@ -16,19 +16,26 @@ import LinearGradient from 'react-native-linear-gradient';
 const PostWrapper = ({Post}) => {
   const {width, height} = Dimensions.get('window');
   const [isShowModel, setIsShowModel] = useState(false);
+  const [selectedImage, setSelectedImage] = useState();
   return (
     <View
       style={{
-        borderColor: 'white',
+        // borderColor: 'white',
         marginVertical: 'auto',
-        width: width * 0.9,
+        width: width,
         alignSelf: 'center',
-        height: height * 0.53,
+        height: height * 0.6,
         backgroundColor: color.black,
+        borderWidth: 1,
       }}>
       {/* show dominator */}
       <LinearGradient
-        colors={[color.blue, 'rgba(0, 0, 0, 0.09)']}
+        colors={[
+          Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote
+            ? 'rgb(235, 109, 109)'
+            : color.blue,
+          'rgba(0, 0, 0, 0.09)',
+        ]}
         style={{
           padding: 10,
           flexDirection: 'row',
@@ -43,14 +50,28 @@ const PostWrapper = ({Post}) => {
           priority={FastImage.priority.high}
           style={{width: 20, aspectRatio: 1}}
         />
-        <Text
-          style={{
-            color: color.white,
-            fontFamily: Font.SemiBold,
-            letterSpacing: 0.4,
-          }}>
-          Dominator: Jeya Prakash
-        </Text>
+        {Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote ? (
+          <Text
+            style={{
+              color: color.white,
+              fontFamily: Font.SemiBold,
+              letterSpacing: 0.4,
+            }}>
+            Tied
+          </Text>
+        ) : (
+          <Text
+            style={{
+              color: color.white,
+              fontFamily: Font.SemiBold,
+              letterSpacing: 0.4,
+            }}>
+            Dominator:{' '}
+            {Post?.user1.Post?.PostVote > Post?.user2?.Post?.PostDisVote
+              ? Post?.user1.username
+              : Post?.user2?.username}
+          </Text>
+        )}
       </LinearGradient>
       {/* first user */}
       <View
@@ -61,7 +82,11 @@ const PostWrapper = ({Post}) => {
           flex: 1,
         }}>
         <View style={{borderWidth: 0, borderColor: 'red', width: '50%'}}>
-          <TouchableOpacity onPress={() => setIsShowModel(true)}>
+          <TouchableOpacity
+            onPress={() => {
+              setIsShowModel(true);
+              setSelectedImage(Post?.user1?.Post?.PostImage);
+            }}>
             <FastImage
               source={{
                 uri: Post?.user1?.Post?.PostImage,
@@ -86,7 +111,7 @@ const PostWrapper = ({Post}) => {
             padding: 15,
             flexDirection: 'column',
             justifyContent: 'center',
-            rowGap: 15,
+            rowGap: 5,
             backgroundColor: color.black,
           }}>
           {/* profile info */}
@@ -95,7 +120,6 @@ const PostWrapper = ({Post}) => {
               flexDirection: 'row',
               alignItems: 'center',
               columnGap: 8,
-              // backgroundColor: color.Bg,
               padding: 10,
               borderRadius: 10,
               justifyContent: 'center',
@@ -139,7 +163,7 @@ const PostWrapper = ({Post}) => {
               <FastImage
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
                 resizeMode="contain"
-                style={{width: 20, aspectRatio: 1}}
+                style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
                 {Post?.user1?.Post?.PostStreak}
@@ -155,7 +179,7 @@ const PostWrapper = ({Post}) => {
               <FastImage
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
                 resizeMode="contain"
-                style={{width: 20, aspectRatio: 1}}
+                style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
                 {Post?.user1?.Post?.PostVote}
@@ -171,7 +195,7 @@ const PostWrapper = ({Post}) => {
               <FastImage
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
                 resizeMode="contain"
-                style={{width: 20, aspectRatio: 1}}
+                style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
                 {Post?.user1?.Post?.PostDisVote}
@@ -209,7 +233,11 @@ const PostWrapper = ({Post}) => {
           flex: 1,
         }}>
         <View style={{borderWidth: 0, borderColor: 'red', width: '50%'}}>
-          <TouchableOpacity onPress={() => setIsShowModel(true)}>
+          <TouchableOpacity
+            onPress={() => {
+              setIsShowModel(true);
+              setSelectedImage(Post?.user2?.Post?.PostImage);
+            }}>
             <FastImage
               source={{
                 uri: Post?.user2?.Post?.PostImage,
@@ -232,7 +260,7 @@ const PostWrapper = ({Post}) => {
             width: '50%',
             flexDirection: 'column',
             justifyContent: 'center',
-            rowGap: 15,
+            rowGap: 5,
             backgroundColor: color.black,
           }}>
           {/* profile info */}
@@ -251,8 +279,8 @@ const PostWrapper = ({Post}) => {
                 uri: Post?.user2?.profileImage,
                 priority: FastImage.priority.high,
               }}
-              resizeMode="contain"
-              style={{width: 30, aspectRatio: 1, borderRadius: 50}}
+              // resizeMode="contain"
+              style={{width: 40, aspectRatio: 1, borderRadius: 50}}
             />
             <Text
               style={{
@@ -281,7 +309,7 @@ const PostWrapper = ({Post}) => {
               <FastImage
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
                 resizeMode="contain"
-                style={{width: 20, aspectRatio: 1}}
+                style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
                 {Post?.user2?.Post?.PostStreak}
@@ -297,7 +325,7 @@ const PostWrapper = ({Post}) => {
               <FastImage
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
                 resizeMode="contain"
-                style={{width: 20, aspectRatio: 1}}
+                style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
                 {Post?.user2?.Post?.PostVote}
@@ -313,7 +341,7 @@ const PostWrapper = ({Post}) => {
               <FastImage
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
                 resizeMode="contain"
-                style={{width: 20, aspectRatio: 1}}
+                style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
                 {Post?.user2?.Post?.PostDisVote}
@@ -356,7 +384,7 @@ const PostWrapper = ({Post}) => {
           }}>
           <FastImage
             source={{
-              uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg',
+              uri: selectedImage,
               priority: FastImage.priority.high,
             }}
             resizeMode="contain"

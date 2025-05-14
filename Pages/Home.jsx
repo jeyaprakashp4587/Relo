@@ -48,16 +48,18 @@ const Home = () => {
         // borderWidth: 0,
         borderColor: 'white',
         flexDirection: 'column',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-start',
+        rowGap: 50,
       }}>
       {/* Header */}
       <View
         style={{
           paddingHorizontal: 15,
-          // borderColor: 'red',
+          // borderColor: 'blue',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          // borderWidth: 0,
+          borderWidth: 2,
+          paddingVertical: 15,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
@@ -90,16 +92,17 @@ const Home = () => {
       ) : (
         <View
           style={{
-            borderWidth: 0,
+            // borderWidth: 2,
             borderColor: 'red',
             height: height * 0.65,
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',
             overflow: 'hidden',
+            flex: 1,
           }}>
           <View style={{borderWidth: 0, borderColor: 'blue'}}>
-            <Skeleton width={230} height={220} radius={10} />
+            <Skeleton width={230} height={220} radius={0} />
           </View>
           <View
             style={{
@@ -109,38 +112,10 @@ const Home = () => {
             <Skeleton width={230} height={300} radius={10} />
           </View>
           <View style={{borderWidth: 0, borderColor: 'blue'}}>
-            <Skeleton width={230} height={220} radius={10} />
+            <Skeleton width={230} height={220} radius={0} />
           </View>
         </View>
       )}
-
-      {/* swipe tutorial */}
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          rowGap: 10,
-          marginTop: 10,
-          // flex: 1,
-          borderWidth: 0,
-          borderColor: 'red',
-        }}>
-        <Image
-          source={{uri: 'https://i.ibb.co/7xMp1Zzn/swipe.png'}}
-          resizeMode="contain"
-          style={{width: width * 0.14, aspectRatio: 1, tintColor: color.Bg}}
-        />
-        <Text
-          style={{
-            color: color.Bg,
-            fontFamily: Font.Medium,
-            fontSize: width * 0.04,
-            letterSpacing: 0.4,
-          }}>
-          swipe to see
-        </Text>
-      </View>
     </View>
   );
 };
