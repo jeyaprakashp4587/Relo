@@ -123,7 +123,7 @@ const SignIn = ({navigation}) => {
         <LinearGradient colors={['#114281', '#093466']} style={styles.button}>
           <TouchableOpacity onPress={handleLogin} disabled={loading}>
             {loading ? (
-              <ActivityIndicator color="white" size={28} />
+              <ActivityIndicator color="white" size={26} />
             ) : (
               <Text style={styles.buttonText}>Sign In</Text>
             )}

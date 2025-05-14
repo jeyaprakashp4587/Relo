@@ -9,9 +9,10 @@ import {useData} from '../Context/Contexter';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import {Api} from '../Api/Api';
+import Skeleton from '../skeleton/Skeleton';
 
 const Home = () => {
-  const {width} = Dimensions.get('window');
+  const {width, height} = Dimensions.get('window');
   const navigation = useNavigation();
   const {user} = useData();
   const data = [
@@ -20,27 +21,31 @@ const Home = () => {
     {title: 'Third Item'},
   ];
   const carouselRef = useRef(null);
-  const renderItem = useCallback(({item}) => {
-    return <PostWrapper item={item} />;
+  const renderItem = useCallback(post => {
+    return <PostWrapper Post={post} />;
   }, []);
   // get the random post
+  const [randomPost, setRandomPost] = useState();
+  const [showEmpty, setShowEmpty] = useState(false);
   const getRandom = useCallback(async () => {
     try {
       const {data, status} = await axios.get(`${Api}/Post/getRandomPair`);
       if (status === 200) {
-        console.log(data);
+        setRandomPost(data?.post);
       }
     } catch (error) {}
   }, [user]);
   useEffect(() => {
     getRandom();
   }, []);
+  console.log(user);
+
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: color.black,
-        // borderWidth: 3,
+        // borderWidth: 0,
         borderColor: 'white',
         flexDirection: 'column',
         justifyContent: 'space-around',
@@ -52,7 +57,7 @@ const Home = () => {
           // borderColor: 'red',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          // borderWidth: 1,
+          // borderWidth: 0,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
@@ -61,7 +66,7 @@ const Home = () => {
             }}
             resizeMode="cover"
             style={{
-              width: width * 0.13,
+              width: width * 0.17,
               aspectRatio: 1,
               borderRadius: 50,
               borderWidth: 3,
@@ -70,17 +75,46 @@ const Home = () => {
           />
         </TouchableOpacity>
       </View>
-      {/* carousel */}
-      <Carousel
-        ref={carouselRef}
-        width={width}
-        data={data}
-        scrollAnimationDuration={1000}
-        renderItem={renderItem}
-        style={{borderWidth: 0, borderColor: 'white'}}
-        height={550}
-        mode={'horizontal-stack'}
-      />
+      {/* carousel and skeleton */}
+      {randomPost?.length > 0 ? (
+        <Carousel
+          ref={carouselRef}
+          width={width}
+          data={randomPost}
+          scrollAnimationDuration={1000}
+          renderItem={({item}) => renderItem(item)}
+          style={{borderWidth: 0, borderColor: 'white'}}
+          height={height * 0.65}
+          mode={'horizontal-stack'}
+        />
+      ) : (
+        <View
+          style={{
+            borderWidth: 0,
+            borderColor: 'red',
+            height: height * 0.65,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            overflow: 'hidden',
+          }}>
+          <View style={{borderWidth: 0, borderColor: 'blue'}}>
+            <Skeleton width={230} height={220} radius={10} />
+          </View>
+          <View
+            style={{
+              borderWidth: 0,
+              borderColor: 'blue',
+            }}>
+            <Skeleton width={230} height={300} radius={10} />
+          </View>
+          <View style={{borderWidth: 0, borderColor: 'blue'}}>
+            <Skeleton width={230} height={220} radius={10} />
+          </View>
+        </View>
+      )}
+
+      {/* swipe tutorial */}
       <View
         style={{
           flexDirection: 'column',
@@ -88,6 +122,9 @@ const Home = () => {
           alignItems: 'center',
           rowGap: 10,
           marginTop: 10,
+          // flex: 1,
+          borderWidth: 0,
+          borderColor: 'red',
         }}>
         <Image
           source={{uri: 'https://i.ibb.co/7xMp1Zzn/swipe.png'}}

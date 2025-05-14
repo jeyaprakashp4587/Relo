@@ -16,7 +16,6 @@ const Splash = () => {
     const AutoLogin = async () => {
       try {
         const id = await AsyncStorage.getItem('user_id');
-        console.log(id);
         if (id) {
           const {status, data} = await axios(`${Api}/Login/getUser/${id}`);
           if (status === 200) {

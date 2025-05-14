@@ -13,18 +13,8 @@ import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
 import LinearGradient from 'react-native-linear-gradient';
 
-const PostWrapper = () => {
+const PostWrapper = ({Post}) => {
   const {width, height} = Dimensions.get('window');
-  const boyProfileImages = [
-    'https://i.ibb.co/N1q9xbz/boy3.jpg',
-    'https://i.ibb.co/N2gGTTk/boy2.jpg',
-    'https://i.ibb.co/4RJhQBn/boy1.jpg',
-  ];
-  const girlProfileImages = [
-    'https://i.ibb.co/T8sbxRd/girl2.jpg',
-    'https://i.ibb.co/8gPTcpK/girl1.jpg',
-    'https://i.ibb.co/s2bB4yj/girl3.jpg',
-  ];
   const [isShowModel, setIsShowModel] = useState(false);
   return (
     <View
@@ -74,7 +64,7 @@ const PostWrapper = () => {
           <TouchableOpacity onPress={() => setIsShowModel(true)}>
             <FastImage
               source={{
-                uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg',
+                uri: Post?.user1?.Post?.PostImage,
                 priority: FastImage.priority.high,
               }}
               resizeMode="cover"
@@ -112,12 +102,12 @@ const PostWrapper = () => {
             }}>
             <FastImage
               source={{
-                uri: 'https://i.ibb.co/N2gGTTk/boy2.jpg',
+                uri: Post?.user1?.profileImage,
                 priority: FastImage.priority.high,
               }}
-              resizeMode="contain"
+              // resizeMode="contain"
               style={{
-                width: 30,
+                width: 40,
                 aspectRatio: 1,
                 borderRadius: 50,
               }}
@@ -129,7 +119,7 @@ const PostWrapper = () => {
                 fontSize: width * 0.036,
                 letterSpacing: 0.2,
               }}>
-              Jeya Prakash
+              {Post?.user1?.username}
             </Text>
           </View>
           {/* image info */}
@@ -152,7 +142,7 @@ const PostWrapper = () => {
                 style={{width: 20, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                20
+                {Post?.user1?.Post?.PostStreak}
               </Text>
             </View>
             <View
@@ -168,7 +158,7 @@ const PostWrapper = () => {
                 style={{width: 20, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                563
+                {Post?.user1?.Post?.PostVote}
               </Text>
             </View>
             <View
@@ -184,7 +174,7 @@ const PostWrapper = () => {
                 style={{width: 20, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                100
+                {Post?.user1?.Post?.PostDisVote}
               </Text>
             </View>
           </View>
@@ -222,7 +212,7 @@ const PostWrapper = () => {
           <TouchableOpacity onPress={() => setIsShowModel(true)}>
             <FastImage
               source={{
-                uri: 'https://i.ibb.co/8gPTcpK/girl1.jpg',
+                uri: Post?.user2?.Post?.PostImage,
                 priority: FastImage.priority.high,
               }}
               style={{
@@ -258,7 +248,7 @@ const PostWrapper = () => {
             }}>
             <FastImage
               source={{
-                uri: 'https://i.ibb.co/s2bB4yj/girl3.jpg',
+                uri: Post?.user2?.profileImage,
                 priority: FastImage.priority.high,
               }}
               resizeMode="contain"
@@ -271,7 +261,7 @@ const PostWrapper = () => {
                 fontSize: width * 0.036,
                 letterSpacing: 0.2,
               }}>
-              Relo
+              {Post?.user2?.username}
             </Text>
           </View>
           {/* image info */}
@@ -294,7 +284,7 @@ const PostWrapper = () => {
                 style={{width: 20, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                23
+                {Post?.user2?.Post?.PostStreak}
               </Text>
             </View>
             <View
@@ -310,7 +300,7 @@ const PostWrapper = () => {
                 style={{width: 20, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                53
+                {Post?.user2?.Post?.PostVote}
               </Text>
             </View>
             <View
@@ -326,7 +316,7 @@ const PostWrapper = () => {
                 style={{width: 20, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                10
+                {Post?.user2?.Post?.PostDisVote}
               </Text>
             </View>
           </View>
