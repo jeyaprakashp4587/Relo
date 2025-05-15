@@ -4,6 +4,7 @@ import {
   Modal,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -12,11 +13,50 @@ import {color} from '../Const/Color';
 import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from 'axios';
+import {Api} from '../Api/Api';
 
 const PostWrapper = ({Post}) => {
   const {width, height} = Dimensions.get('window');
   const [isShowModel, setIsShowModel] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
+  // set the post values in state
+  const [postVote, setPostVote] = useState({
+    user1: Post?.user1?.Post?.PostVote,
+    user2: Post?.user2?.Post?.PostVote,
+  });
+  const [postStreak, setPostStreak] = useState({
+    user1: Post?.user1?.Post?.PostStreak,
+    user2: Post?.user2?.Post?.PostStreak,
+  });
+  const [postDisVote, setPostDisVote] = useState({
+    user1: Post?.user1?.Post?.PostDisVote,
+    user2: Post?.user2?.Post?.PostDisVote,
+  });
+  // const vote
+  const handleVote = useCallback(
+    async (winner, losser, winnerPost, losserPost) => {
+      try {
+        const {data, status} = await axios.post(`${Api}/Post/vote`, {
+          winner: String(winner),
+          losser: String(losser),
+          winnerPost: String(winnerPost),
+          losserPost: String(losserPost),
+        });
+        if (status === 200) {
+          setPostVote(prev => ({...prev, user1: prev.user1 + 1}));
+          setPostStreak(prev => ({...prev, user1: prev.user1 + 1}));
+          setPostDisVote(prev => ({
+            ...prev,
+            user2: (prev.user2 || 0) + 1,
+          }));
+        }
+      } catch (error) {
+        ToastAndroid.show('something is wrong', ToastAndroid.SHORT);
+      }
+    },
+    [postVote, postDisVote, postStreak],
+  );
   return (
     <View
       style={{
@@ -166,7 +206,7 @@ const PostWrapper = ({Post}) => {
                 style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                {Post?.user1?.Post?.PostStreak}
+                {postStreak.user1}
               </Text>
             </View>
             <View
@@ -182,7 +222,7 @@ const PostWrapper = ({Post}) => {
                 style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                {Post?.user1?.Post?.PostVote}
+                {postVote.user1}
               </Text>
             </View>
             <View
@@ -198,12 +238,20 @@ const PostWrapper = ({Post}) => {
                 style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                {Post?.user1?.Post?.PostDisVote}
+                {postDisVote.user1}
               </Text>
             </View>
           </View>
           {/* vote button */}
           <TouchableOpacity
+            onPress={() =>
+              handleVote({
+                winner: Post?.user1?._id,
+                losser: Post?.user2?._id,
+                winnerPost: Post?.user1?.Post?._id,
+                losserPost: Post?.user2?.Post?._id,
+              })
+            }
             style={{
               padding: 5,
               flexDirection: 'row',
@@ -312,7 +360,7 @@ const PostWrapper = ({Post}) => {
                 style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                {Post?.user2?.Post?.PostStreak}
+                {postStreak.user2}
               </Text>
             </View>
             <View
@@ -328,7 +376,7 @@ const PostWrapper = ({Post}) => {
                 style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                {Post?.user2?.Post?.PostVote}
+                {postVote.user2}
               </Text>
             </View>
             <View
@@ -344,12 +392,20 @@ const PostWrapper = ({Post}) => {
                 style={{width: 15, aspectRatio: 1}}
               />
               <Text style={{color: color.white, fontSize: width * 0.027}}>
-                {Post?.user2?.Post?.PostDisVote}
+                {postDisVote.user2}
               </Text>
             </View>
           </View>
           {/* vote button */}
           <TouchableOpacity
+            onPress={() =>
+              handleVote({
+                winner: Post?.user2?._id,
+                losser: Post?.user1?._id,
+                winnerPost: Post?.user2?.Post?._id,
+                losserPost: Post?.user1?.Post?._id,
+              })
+            }
             style={{
               padding: 5,
               flexDirection: 'row',

@@ -53,14 +53,15 @@ const Profile = () => {
             }}>
             Jeya Prakash
           </Text>
-          <View>
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', columnGap: 5}}>
             <Text
               style={{
                 color: color.white,
                 fontFamily: Font.Regular,
                 fontSize: width * 0.04,
               }}>
-              uploads
+              uploads:
             </Text>
             <Text
               style={{
@@ -68,7 +69,7 @@ const Profile = () => {
                 fontFamily: Font.Regular,
                 fontSize: width * 0.04,
               }}>
-              0
+              {user?.Post?.length}
             </Text>
           </View>
         </View>
@@ -117,10 +118,24 @@ const Profile = () => {
             }}>
             <FlatList
               data={user?.Post}
+              contentContainerStyle={{
+                rowGap: 10,
+                justifyContent: 'space-between',
+                borderWidth: 1,
+                // borderColor: 'red',
+                width: '100%',
+              }}
+              horizontal
               renderItem={({item, index}) => (
                 <TouchableOpacity
                   key={index}
-                  style={{borderRadius: 5, overflow: 'hidden'}}>
+                  style={{
+                    borderRadius: 5,
+                    overflow: 'hidden',
+                    // borderWidth: 5,
+                    borderColor: 'red',
+                    width: width * 0.44,
+                  }}>
                   <FastImage
                     source={{
                       uri: item?.PostImage,
@@ -128,7 +143,7 @@ const Profile = () => {
                     }}
                     resizeMode="contain"
                     style={{
-                      width: width * 0.45,
+                      width: '100%',
                       aspectRatio: 1,
                       borderRadius: 5,
                     }}
