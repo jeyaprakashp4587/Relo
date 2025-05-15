@@ -22,40 +22,57 @@ const PostWrapper = ({Post}) => {
   const [selectedImage, setSelectedImage] = useState();
   // set the post values in state
   const [postVote, setPostVote] = useState({
-    user1: Post?.user1?.Post?.PostVote,
-    user2: Post?.user2?.Post?.PostVote,
+    user1: Post?.user1?.Post?.PostVote || 0,
+    user2: Post?.user2?.Post?.PostVote || 0,
   });
   const [postStreak, setPostStreak] = useState({
-    user1: Post?.user1?.Post?.PostStreak,
-    user2: Post?.user2?.Post?.PostStreak,
+    user1: Post?.user1?.Post?.PostStreak || 0,
+    user2: Post?.user2?.Post?.PostStreak || 0,
   });
   const [postDisVote, setPostDisVote] = useState({
-    user1: Post?.user1?.Post?.PostDisVote,
-    user2: Post?.user2?.Post?.PostDisVote,
+    user1: Post?.user1?.Post?.PostDisVote || 0,
+    user2: Post?.user2?.Post?.PostDisVote || 0,
   });
-  // const vote
+
   const handleVote = useCallback(
-    async (winner, losser, winnerPost, losserPost) => {
+    async user => {
       try {
+        console.log(user);
+
         const {data, status} = await axios.post(`${Api}/Post/vote`, {
-          winner: String(winner),
-          losser: String(losser),
-          winnerPost: String(winnerPost),
-          losserPost: String(losserPost),
+          winner: user === 'user1' ? Post?.user1?._id : Post?.user2?._id,
+          losser: user === 'user1' ? Post?.user2?._id : Post?.user1?._id,
+          winnerPost:
+            user === 'user1' ? Post?.user1?.Post?._id : Post?.user2?.Post?._id,
+          losserPost:
+            user === 'user1' ? Post?.user2?.Post?._id : Post?.user1?.Post?._id,
         });
+
         if (status === 200) {
-          setPostVote(prev => ({...prev, user1: prev.user1 + 1}));
-          setPostStreak(prev => ({...prev, user1: prev.user1 + 1}));
-          setPostDisVote(prev => ({
-            ...prev,
-            user2: (prev.user2 || 0) + 1,
-          }));
+          if (user === 'user1') {
+            setPostVote(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
+            setPostStreak(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
+            setPostDisVote(prev => ({
+              ...prev,
+              user2: (prev.user2 || 0) + 1,
+            }));
+            setPostStreak(prev => ({...prev, user2: 0}));
+          } else {
+            setPostVote(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
+            setPostStreak(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
+            setPostDisVote(prev => ({
+              ...prev,
+              user1: (prev.user1 || 0) + 1,
+            }));
+            setPostStreak(prev => ({...prev, user1: 0}));
+          }
         }
       } catch (error) {
-        ToastAndroid.show('something is wrong', ToastAndroid.SHORT);
+        ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
+        console.error(error);
       }
     },
-    [postVote, postDisVote, postStreak],
+    [Post],
   );
   return (
     <View
@@ -244,14 +261,7 @@ const PostWrapper = ({Post}) => {
           </View>
           {/* vote button */}
           <TouchableOpacity
-            onPress={() =>
-              handleVote({
-                winner: Post?.user1?._id,
-                losser: Post?.user2?._id,
-                winnerPost: Post?.user1?.Post?._id,
-                losserPost: Post?.user2?.Post?._id,
-              })
-            }
+            onPress={() => handleVote('user1')}
             style={{
               padding: 5,
               flexDirection: 'row',
@@ -398,14 +408,7 @@ const PostWrapper = ({Post}) => {
           </View>
           {/* vote button */}
           <TouchableOpacity
-            onPress={() =>
-              handleVote({
-                winner: Post?.user2?._id,
-                losser: Post?.user1?._id,
-                winnerPost: Post?.user2?.Post?._id,
-                losserPost: Post?.user1?.Post?._id,
-              })
-            }
+            onPress={() => handleVote('user2')}
             style={{
               padding: 5,
               flexDirection: 'row',
