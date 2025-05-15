@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import {Api} from '../Api/Api';
 import Skeleton from '../skeleton/Skeleton';
+import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
 
 const Home = () => {
   const {width, height} = Dimensions.get('window');
@@ -45,17 +46,17 @@ const Home = () => {
       style={{
         flex: 1,
         backgroundColor: color.black,
-        // borderWidth: 0,
-        borderColor: 'white',
+        borderWidth: 8,
+        borderColor: 'red',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        rowGap: 50,
+        rowGap: 10,
       }}>
       {/* Header */}
       <View
         style={{
           paddingHorizontal: 15,
-          // borderColor: 'blue',
+          borderColor: 'blue',
           flexDirection: 'row',
           justifyContent: 'space-between',
           borderWidth: 2,
@@ -77,6 +78,7 @@ const Home = () => {
           />
         </TouchableOpacity>
       </View>
+
       {/* carousel and skeleton */}
       {randomPost?.length > 0 ? (
         <Carousel
@@ -85,7 +87,7 @@ const Home = () => {
           data={randomPost}
           scrollAnimationDuration={1000}
           renderItem={({item}) => renderItem(item)}
-          style={{borderWidth: 0, borderColor: 'white'}}
+          style={{borderWidth: 3, borderColor: 'white'}}
           height={height * 0.65}
           mode={'horizontal-stack'}
         />
@@ -116,6 +118,18 @@ const Home = () => {
           </View>
         </View>
       )}
+      {/* Banner add */}
+      <View>
+        <BannerAd
+          unitId={
+            __DEV__ ? TestIds.BANNER : 'ca-app-pub-3257747925516984/6972244634'
+          }
+          size={BannerAdSize.BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+        />
+      </View>
     </View>
   );
 };
