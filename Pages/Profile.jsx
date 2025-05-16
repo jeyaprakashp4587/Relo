@@ -118,6 +118,7 @@ const Profile = () => {
             }}>
             <FlatList
               data={user?.Post}
+              keyExtractor={item => item?._id}
               contentContainerStyle={{
                 rowGap: 10,
                 justifyContent: 'space-between',
@@ -128,7 +129,6 @@ const Profile = () => {
               horizontal
               renderItem={({item, index}) => (
                 <TouchableOpacity
-                  key={index}
                   style={{
                     borderRadius: 5,
                     overflow: 'hidden',

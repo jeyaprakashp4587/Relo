@@ -39,18 +39,18 @@ const Home = () => {
   useEffect(() => {
     getRandom();
   }, []);
-  console.log(user);
 
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: color.black,
-        borderWidth: 8,
+        // borderWidth: 8,
         borderColor: 'red',
         flexDirection: 'column',
-        justifyContent: 'flex-start',
+        // justifyContent: 'flex-start',
         rowGap: 10,
+        justifyContent: 'space-between',
       }}>
       {/* Header */}
       <View
@@ -59,8 +59,8 @@ const Home = () => {
           borderColor: 'blue',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          borderWidth: 2,
-          paddingVertical: 15,
+          // borderWidth: 2,
+          paddingVertical: 10,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
@@ -72,13 +72,30 @@ const Home = () => {
               width: width * 0.17,
               aspectRatio: 1,
               borderRadius: 50,
-              borderWidth: 3,
+              // borderWidth: 3,
               borderColor: 'white',
             }}
           />
         </TouchableOpacity>
       </View>
-
+      {/* Banner add */}
+      <View
+        style={{
+          borderColor: 'red',
+          justifyContent: 'center',
+          alignItems: 'center',
+          // borderWidth: 2,
+        }}>
+        <BannerAd
+          unitId={
+            __DEV__ ? TestIds.BANNER : 'ca-app-pub-3257747925516984/6972244634'
+          }
+          size={BannerAdSize.BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+        />
+      </View>
       {/* carousel and skeleton */}
       {randomPost?.length > 0 ? (
         <Carousel
@@ -87,7 +104,7 @@ const Home = () => {
           data={randomPost}
           scrollAnimationDuration={1000}
           renderItem={({item}) => renderItem(item)}
-          style={{borderWidth: 3, borderColor: 'white'}}
+          style={{borderWidth: 0, borderColor: 'white', flex: 1}}
           height={height * 0.65}
           mode={'horizontal-stack'}
         />
@@ -95,7 +112,7 @@ const Home = () => {
         <View
           style={{
             // borderWidth: 2,
-            borderColor: 'red',
+            // borderColor: 'red',
             height: height * 0.65,
             justifyContent: 'center',
             alignItems: 'center',
@@ -118,18 +135,18 @@ const Home = () => {
           </View>
         </View>
       )}
-      {/* Banner add */}
-      <View>
-        <BannerAd
-          unitId={
-            __DEV__ ? TestIds.BANNER : 'ca-app-pub-3257747925516984/6972244634'
-          }
-          size={BannerAdSize.BANNER}
-          requestOptions={{
-            requestNonPersonalizedAdsOnly: true,
-          }}
-        />
-      </View>
+      {/* tutorial text */}
+      <Text
+        style={{
+          color: color.veryLightGrey,
+          fontFamily: Font.Medium,
+          fontSize: width * 0.035,
+          paddingBottom: 20,
+          textAlign: 'center',
+          letterSpacing: 0.4,
+        }}>
+        swipe to see
+      </Text>
     </View>
   );
 };
