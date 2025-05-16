@@ -26,15 +26,21 @@ const Home = () => {
     return <PostWrapper Post={post} />;
   }, []);
   // get the random post
-  const [randomPost, setRandomPost] = useState();
+  const [randomPost, setRandomPost] = useState([]);
   const [showEmpty, setShowEmpty] = useState(false);
+  const [loading, setLoading] = useState(false);
   const getRandom = useCallback(async () => {
     try {
+      setLoading(true);
       const {data, status} = await axios.get(`${Api}/Post/getRandomPair`);
       if (status === 200) {
-        setRandomPost(data?.post);
+        console.log(data?.post);
+        setRandomPost([...randomPost, ...data?.post]);
+        setLoading(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      setLoading(false);
+    }
   }, [user]);
   useEffect(() => {
     getRandom();
@@ -72,7 +78,7 @@ const Home = () => {
               width: width * 0.17,
               aspectRatio: 1,
               borderRadius: 50,
-              // borderWidth: 3,
+              borderWidth: 3,
               borderColor: 'white',
             }}
           />
@@ -97,22 +103,21 @@ const Home = () => {
         />
       </View>
       {/* carousel and skeleton */}
-      {randomPost?.length > 0 ? (
+      {!loading ? (
         <Carousel
           ref={carouselRef}
           width={width}
           data={randomPost}
           scrollAnimationDuration={1000}
           renderItem={({item}) => renderItem(item)}
-          style={{borderWidth: 0, borderColor: 'white', flex: 1}}
+          style={{borderWidth: 0, borderColor: 'white'}}
           height={height * 0.65}
+          onScrollEnd={getRandom}
           mode={'horizontal-stack'}
         />
       ) : (
         <View
           style={{
-            // borderWidth: 2,
-            // borderColor: 'red',
             height: height * 0.65,
             justifyContent: 'center',
             alignItems: 'center',
@@ -138,12 +143,11 @@ const Home = () => {
       {/* tutorial text */}
       <Text
         style={{
-          color: color.veryLightGrey,
-          fontFamily: Font.Medium,
+          color: 'rgba(124, 128, 128, 0.92)',
+          fontFamily: Font.SemiBold,
           fontSize: width * 0.035,
           paddingBottom: 20,
           textAlign: 'center',
-          letterSpacing: 0.4,
         }}>
         swipe to see
       </Text>

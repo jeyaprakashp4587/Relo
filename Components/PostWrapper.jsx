@@ -124,7 +124,7 @@ const PostWrapper = ({Post}) => {
               letterSpacing: 0.4,
             }}>
             Dominator:{' '}
-            {Post?.user1.Post?.PostVote > Post?.user2?.Post?.PostDisVote
+            {Post?.user1.Post?.PostVote > Post?.user2?.Post?.PostVote
               ? Post?.user1.username
               : Post?.user2?.username}
           </Text>

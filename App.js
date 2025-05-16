@@ -5,8 +5,15 @@ import {StatusBar} from 'react-native';
 import {color} from './Const/Color';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {ContextProvider} from './Context/Contexter';
+import MobileAds from 'react-native-google-mobile-ads';
 
 const App = () => {
+  useEffect(() => {
+    MobileAds()
+      .initialize()
+      .then(() => console.log('Google mobile ads was initilialized'));
+  }, []);
+
   return (
     <GestureHandlerRootView>
       <ContextProvider>

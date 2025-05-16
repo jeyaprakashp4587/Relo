@@ -10,6 +10,8 @@ import {useData} from '../Context/Contexter';
 const Profile = () => {
   const {width, height} = Dimensions.get('window');
   const {user} = useData();
+  console.log(user?.Post);
+
   return (
     <View style={{backgroundColor: color.black, flex: 1}}>
       <Text
@@ -32,10 +34,10 @@ const Profile = () => {
         }}>
         <FastImage
           source={{
-            uri: 'https://i.ibb.co/8gPTcpK/girl1.jpg',
+            uri: user?.ProfileImg ?? 'https://i.ibb.co/8gPTcpK/girl1.jpg',
             priority: FastImage.priority.high,
           }}
-          resizeMode="contain"
+          // resizeMode="contain"
           style={{
             width: width * 0.3,
             aspectRatio: 1,
@@ -51,7 +53,7 @@ const Profile = () => {
               fontFamily: Font.Medium,
               fontSize: width * 0.05,
             }}>
-            Jeya Prakash
+            {user?.Name}
           </Text>
           <View
             style={{flexDirection: 'row', alignItems: 'center', columnGap: 5}}>
@@ -115,6 +117,9 @@ const Profile = () => {
               justifyContent: 'space-between',
               rowGap: 10,
               paddingHorizontal: 15,
+              // borderWidth: 1,
+              borderColor: 'blue',
+              flex: 1,
             }}>
             <FlatList
               data={user?.Post}
@@ -122,17 +127,18 @@ const Profile = () => {
               contentContainerStyle={{
                 rowGap: 10,
                 justifyContent: 'space-between',
-                borderWidth: 1,
-                // borderColor: 'red',
+                // borderWidth: 1,
+                borderColor: 'red',
                 width: '100%',
+                flexWrap: 'wrap',
               }}
-              horizontal
+              horizontal={true}
               renderItem={({item, index}) => (
                 <TouchableOpacity
                   style={{
                     borderRadius: 5,
                     overflow: 'hidden',
-                    // borderWidth: 5,
+                    // borderWidth: 1,
                     borderColor: 'red',
                     width: width * 0.44,
                   }}>
@@ -141,7 +147,7 @@ const Profile = () => {
                       uri: item?.PostImage,
                       priority: FastImage.priority.high,
                     }}
-                    resizeMode="contain"
+                    // resizeMode="contain"
                     style={{
                       width: '100%',
                       aspectRatio: 1,
