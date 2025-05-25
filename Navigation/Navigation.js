@@ -39,7 +39,7 @@ const TabNavigation = () => {
           tabBarIcon: () => (
             <Image
               source={{uri: 'https://i.ibb.co/DD0gmYp/home.png'}}
-              style={{width: 27, aspectRatio: 1}}
+              style={{width: 22, aspectRatio: 1}}
             />
           ),
           // tabBarShowLabel: false,
@@ -53,7 +53,7 @@ const TabNavigation = () => {
           tabBarIcon: () => (
             <Image
               source={{uri: 'https://i.ibb.co/WWg5vdF/plus.png'}}
-              style={{width: 25, aspectRatio: 1, tintColor: 'black'}}
+              style={{width: 20, aspectRatio: 1, tintColor: 'black'}}
             />
           ),
           // tabBarIconStyle: {
@@ -78,7 +78,7 @@ const TabNavigation = () => {
           tabBarIcon: () => (
             <Image
               source={{uri: 'https://i.ibb.co/9Vck1rW/people.png'}}
-              style={{width: 30, aspectRatio: 1}}
+              style={{width: 25, aspectRatio: 1}}
             />
           ),
           // tabBarShowLabel: false,

@@ -178,7 +178,7 @@ const Profile = () => {
                     <Text
                       style={{
                         color: color.white,
-                        fontFamily: Font.Medium,
+                        fontFamily: Font.SemiBold,
                         letterSpacing: 0.4,
                         fontSize: width * 0.025,
                       }}>

@@ -31,20 +31,27 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const getRandom = useCallback(async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const {data, status} = await axios.get(`${Api}/Post/getRandomPair`);
       if (status === 200) {
         console.log(data?.post);
         setRandomPost([...randomPost, ...data?.post]);
-        setLoading(false);
+        // setLoading(false);
       }
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
     }
   }, [user]);
   useEffect(() => {
     getRandom();
   }, []);
+  // trigget the getRandom
+  const handleTrigger = index => {
+    console.log(index);
+    if (index == randomPost.length - 2) {
+      getRandom();
+    }
+  };
 
   return (
     <View
@@ -112,7 +119,7 @@ const Home = () => {
           renderItem={({item}) => renderItem(item)}
           style={{borderWidth: 0, borderColor: 'white'}}
           height={height * 0.65}
-          onScrollEnd={getRandom}
+          onSnapToItem={handleTrigger}
           mode={'horizontal-stack'}
         />
       ) : (

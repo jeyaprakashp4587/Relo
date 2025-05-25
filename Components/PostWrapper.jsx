@@ -37,8 +37,6 @@ const PostWrapper = ({Post}) => {
   const handleVote = useCallback(
     async user => {
       try {
-        console.log(user);
-
         const {data, status} = await axios.post(`${Api}/Post/vote`, {
           winner: user === 'user1' ? Post?.user1?._id : Post?.user2?._id,
           losser: user === 'user1' ? Post?.user2?._id : Post?.user1?._id,
@@ -46,6 +44,7 @@ const PostWrapper = ({Post}) => {
             user === 'user1' ? Post?.user1?.Post?._id : Post?.user2?.Post?._id,
           losserPost:
             user === 'user1' ? Post?.user2?.Post?._id : Post?.user1?.Post?._id,
+          voter: user?._id,
         });
 
         if (status === 200) {
@@ -179,7 +178,7 @@ const PostWrapper = ({Post}) => {
               columnGap: 8,
               padding: 10,
               borderRadius: 10,
-              justifyContent: 'center',
+              justifyContent: 'flex-start',
             }}>
             <FastImage
               source={{
@@ -268,12 +267,12 @@ const PostWrapper = ({Post}) => {
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: color.white,
+              backgroundColor: color.Bg,
               borderRadius: 50,
             }}>
             <Text
               style={{
-                color: color.black,
+                color: color.white,
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
@@ -330,7 +329,7 @@ const PostWrapper = ({Post}) => {
               // backgroundColor: color.Bg,
               padding: 10,
               borderRadius: 10,
-              justifyContent: 'center',
+              justifyContent: 'flex-start',
             }}>
             <FastImage
               source={{
@@ -415,12 +414,12 @@ const PostWrapper = ({Post}) => {
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: color.white,
+              backgroundColor: color.Bg,
               borderRadius: 50,
             }}>
             <Text
               style={{
-                color: color.black,
+                color: color.white,
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
