@@ -201,7 +201,6 @@ const SignupScreen = () => {
             </TouchableOpacity>
           </LinearGradient>
         </View>
-
         {/* Step 2 */}
         <View style={styles.step}>
           <View style={styles.content}>
@@ -230,7 +229,6 @@ const SignupScreen = () => {
             </TouchableOpacity>
           </LinearGradient>
         </View>
-
         {/* Step 3 */}
         <View style={styles.step}>
           <View style={styles.content}>

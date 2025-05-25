@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {color} from '../Const/Color';
 import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
@@ -16,10 +16,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import {Api} from '../Api/Api';
 
-const PostWrapper = ({Post}) => {
+const PostWrapper = ({Post, goNext}) => {
   const {width, height} = Dimensions.get('window');
   const [isShowModel, setIsShowModel] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
+  const [voteIndi, setVoteIndi] = useState({
+    user1: false,
+    user2: false,
+  });
   // set the post values in state
   const [postVote, setPostVote] = useState({
     user1: Post?.user1?.Post?.PostVote || 0,
@@ -33,7 +37,6 @@ const PostWrapper = ({Post}) => {
     user1: Post?.user1?.Post?.PostDisVote || 0,
     user2: Post?.user2?.Post?.PostDisVote || 0,
   });
-
   const handleVote = useCallback(
     async user => {
       try {
@@ -46,7 +49,6 @@ const PostWrapper = ({Post}) => {
             user === 'user1' ? Post?.user2?.Post?._id : Post?.user1?.Post?._id,
           voter: user?._id,
         });
-
         if (status === 200) {
           if (user === 'user1') {
             setPostVote(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
@@ -56,6 +58,7 @@ const PostWrapper = ({Post}) => {
               user2: (prev.user2 || 0) + 1,
             }));
             setPostStreak(prev => ({...prev, user2: 0}));
+            setVoteIndi({user1: true, user2: false});
           } else {
             setPostVote(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
             setPostStreak(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
@@ -64,15 +67,32 @@ const PostWrapper = ({Post}) => {
               user1: (prev.user1 || 0) + 1,
             }));
             setPostStreak(prev => ({...prev, user1: 0}));
+            setVoteIndi({user1: false, user2: true});
           }
         }
       } catch (error) {
         ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
         console.error(error);
+      } finally {
+        goNext();
       }
     },
     [Post],
   );
+  useEffect(() => {
+    setPostVote({
+      user1: Post?.user1?.Post?.PostVote || 0,
+      user2: Post?.user2?.Post?.PostVote || 0,
+    });
+    setPostStreak({
+      user1: Post?.user1?.Post?.PostStreak || 0,
+      user2: Post?.user2?.Post?.PostStreak || 0,
+    });
+    setPostDisVote({
+      user1: Post?.user1?.Post?.PostDisVote || 0,
+      user2: Post?.user2?.Post?.PostDisVote || 0,
+    });
+  }, [Post]);
   return (
     <View
       style={{
@@ -260,25 +280,25 @@ const PostWrapper = ({Post}) => {
           </View>
           {/* vote button */}
           <TouchableOpacity
-            onPress={() => handleVote('user1')}
+            onPress={() => !voteIndi.user1 && handleVote('user1')}
             style={{
               padding: 5,
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: color.Bg,
+              backgroundColor: voteIndi.user1 ? color.white : color.Bg,
               borderRadius: 50,
             }}>
             <Text
               style={{
-                color: color.white,
+                color: voteIndi.user1 ? color.black : color.white,
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
                 letterSpacing: 0.3,
               }}>
-              vote
+              {voteIndi.user1 ? 'voted' : 'vote'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -407,25 +427,25 @@ const PostWrapper = ({Post}) => {
           </View>
           {/* vote button */}
           <TouchableOpacity
-            onPress={() => handleVote('user2')}
+            onPress={() => !voteIndi.user2 && handleVote('user2')}
             style={{
               padding: 5,
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
-              backgroundColor: color.Bg,
+              backgroundColor: voteIndi.user2 ? color.white : color.Bg,
               borderRadius: 50,
             }}>
             <Text
               style={{
-                color: color.white,
+                color: voteIndi.user2 ? color.black : color.white,
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
                 letterSpacing: 0.3,
               }}>
-              vote
+              {voteIndi.user2 ? 'voted' : 'vote'}
             </Text>
           </TouchableOpacity>
         </View>
