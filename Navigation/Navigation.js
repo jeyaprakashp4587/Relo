@@ -20,8 +20,8 @@ const TabNavigation = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: color.white,
-          borderTopWidth: 5,
+          backgroundColor: 'rgb(31, 30, 30)',
+          borderTopWidth: 0,
           borderColor: 'white',
           height: height * 0.075,
         },

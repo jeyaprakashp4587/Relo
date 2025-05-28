@@ -103,7 +103,6 @@ const Home = () => {
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          // borderWidth: 1,
           borderColor: 'red',
         }}>
         <BannerAd
@@ -119,7 +118,7 @@ const Home = () => {
         <Carousel
           ref={carouselRef}
           width={width}
-          // height={height * 0.6}
+          height={height * 0.6}
           data={randomPost}
           renderItem={renderItem}
           scrollAnimationDuration={1000}

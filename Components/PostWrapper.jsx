@@ -33,10 +33,6 @@ const PostWrapper = ({Post, goNext}) => {
     user1: Post?.user1?.Post?.PostStreak || 0,
     user2: Post?.user2?.Post?.PostStreak || 0,
   });
-  const [postDisVote, setPostDisVote] = useState({
-    user1: Post?.user1?.Post?.PostDisVote || 0,
-    user2: Post?.user2?.Post?.PostDisVote || 0,
-  });
   const handleVote = useCallback(
     async user => {
       try {
@@ -53,19 +49,13 @@ const PostWrapper = ({Post, goNext}) => {
           if (user === 'user1') {
             setPostVote(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
             setPostStreak(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
-            setPostDisVote(prev => ({
-              ...prev,
-              user2: (prev.user2 || 0) + 1,
-            }));
             setPostStreak(prev => ({...prev, user2: 0}));
+            setPostVote(prev => ({...prev, user2: (prev.user2 || 0) - 1}));
             setVoteIndi({user1: true, user2: false});
           } else {
             setPostVote(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
             setPostStreak(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
-            setPostDisVote(prev => ({
-              ...prev,
-              user1: (prev.user1 || 0) + 1,
-            }));
+            setPostVote(prev => ({...prev, user1: (prev.user1 || 0) - 1}));
             setPostStreak(prev => ({...prev, user1: 0}));
             setVoteIndi({user1: false, user2: true});
           }
@@ -87,10 +77,6 @@ const PostWrapper = ({Post, goNext}) => {
     setPostStreak({
       user1: Post?.user1?.Post?.PostStreak || 0,
       user2: Post?.user2?.Post?.PostStreak || 0,
-    });
-    setPostDisVote({
-      user1: Post?.user1?.Post?.PostDisVote || 0,
-      user2: Post?.user2?.Post?.PostDisVote || 0,
     });
   }, [Post]);
   return (
@@ -127,6 +113,32 @@ const PostWrapper = ({Post, goNext}) => {
                 height: '100%',
               }}
             />
+            {/* large view  */}
+            <TouchableOpacity
+              onPress={() => {
+                setIsShowModel(true);
+                setSelectedImage(Post?.user1?.Post?.PostImage);
+              }}
+              style={{
+                position: 'absolute',
+                borderWidth: 1,
+                borderColor: color.black,
+                padding: 2,
+                borderRadius: 100,
+                width: '60%',
+                alignSelf: 'center',
+                bottom: 10,
+              }}>
+              <Text
+                style={{
+                  color: color.black,
+                  textAlign: 'center',
+                  fontFamily: Font.Medium,
+                  fontSize: width * 0.035,
+                }}>
+                view
+              </Text>
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
         <View
@@ -156,7 +168,7 @@ const PostWrapper = ({Post, goNext}) => {
                 priority: FastImage.priority.high,
               }}
               style={{
-                width: 40,
+                width: 50,
                 aspectRatio: 1,
                 borderRadius: 50,
               }}
@@ -193,11 +205,19 @@ const PostWrapper = ({Post, goNext}) => {
                   tintColor: 'rgba(255, 255, 255, 0.47)',
                 }}
               /> */}
-              <Text style={{fontFamily: Font.Regular}}>streak: </Text>
+              <Text
+                style={{
+                  fontFamily: Font.Regular,
+                  fontSize: width * 0.035,
+                  letterSpacing: 0.3,
+                  color: color.white,
+                }}>
+                streak:{' '}
+              </Text>
               <Text
                 style={{
                   color: color.white,
-                  fontSize: width * 0.027,
+                  fontSize: width * 0.035,
                   fontFamily: Font.Medium,
                 }}>
                 {postStreak.user1}
@@ -218,39 +238,22 @@ const PostWrapper = ({Post, goNext}) => {
                   tintColor: 'rgba(255, 255, 255, 0.47)',
                 }}
               /> */}
-              <Text style={{fontFamily: Font.Regular}}>vote: </Text>
+              <Text
+                style={{
+                  fontFamily: Font.Regular,
+                  fontSize: width * 0.035,
+                  letterSpacing: 0.3,
+                  color: color.white,
+                }}>
+                votes:{' '}
+              </Text>
               <Text
                 style={{
                   color: color.white,
-                  fontSize: width * 0.027,
+                  fontSize: width * 0.035,
                   fontFamily: Font.Medium,
                 }}>
                 {postVote.user1}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-              }}>
-              {/* <Image
-                source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
-                style={{
-                  width: 15,
-                  aspectRatio: 1,
-                  tintColor: 'rgba(255, 255, 255, 0.47)',
-                }}
-              /> */}
-              <Text style={{fontFamily: Font.Regular}}>disvote: </Text>
-              <Text
-                style={{
-                  color: color.white,
-                  fontSize: width * 0.027,
-                  fontFamily: Font.Medium,
-                }}>
-                {postDisVote.user1}
               </Text>
             </View>
           </View>
@@ -265,7 +268,7 @@ const PostWrapper = ({Post, goNext}) => {
               columnGap: 5,
               backgroundColor: voteIndi.user1 ? color.white : color.Bg,
               borderRadius: 50,
-              borderWidth: 1,
+              // borderWidth: 1,
               borderColor: 'rgb(255, 255, 255)',
             }}>
             <Text
@@ -284,7 +287,7 @@ const PostWrapper = ({Post, goNext}) => {
       {/* show dominator */}
       <LinearGradient
         colors={[
-          Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote
+          Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostVote
             ? 'rgb(235, 109, 109)'
             : 'rgba(33, 72, 95, 0.64)',
           'rgba(0, 0, 0, 0.09)',
@@ -297,7 +300,7 @@ const PostWrapper = ({Post, goNext}) => {
         }}
         start={{x: 0, y: 1}}
         end={{x: 1, y: 0}}>
-        {Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote ? (
+        {Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostVote ? (
           <Text
             style={{
               color: color.white,
@@ -345,6 +348,32 @@ const PostWrapper = ({Post, goNext}) => {
                 height: '100%',
               }}
             />
+            {/* large view  */}
+            <TouchableOpacity
+              onPress={() => {
+                setIsShowModel(true);
+                setSelectedImage(Post?.user2?.Post?.PostImage);
+              }}
+              style={{
+                position: 'absolute',
+                borderWidth: 1,
+                borderColor: color.black,
+                padding: 2,
+                borderRadius: 100,
+                width: '60%',
+                alignSelf: 'center',
+                bottom: 10,
+              }}>
+              <Text
+                style={{
+                  color: color.black,
+                  textAlign: 'center',
+                  fontFamily: Font.Medium,
+                  fontSize: width * 0.035,
+                }}>
+                view
+              </Text>
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
         <View
@@ -410,12 +439,21 @@ const PostWrapper = ({Post, goNext}) => {
                   tintColor: 'rgba(255, 255, 255, 0.47)',
                 }}
               /> */}
-              <Text style={{fontFamily: Font.Regular}}>streak: </Text>
+              <Text
+                style={{
+                  fontFamily: Font.Regular,
+                  fontSize: width * 0.035,
+                  letterSpacing: 0.3,
+                  color: color.white,
+                }}>
+                streak:{' '}
+              </Text>
               <Text
                 style={{
                   color: color.white,
-                  fontSize: width * 0.027,
+                  fontSize: width * 0.035,
                   fontFamily: Font.Medium,
+                  letterSpacing: 0.3,
                 }}>
                 {postStreak.user2}
               </Text>
@@ -436,40 +474,23 @@ const PostWrapper = ({Post, goNext}) => {
                   tintColor: 'rgba(255, 255, 255, 0.47)',
                 }}
               /> */}
-              <Text style={{fontFamily: Font.Regular}}>vote: </Text>
+              <Text
+                style={{
+                  fontFamily: Font.Regular,
+                  fontSize: width * 0.035,
+                  letterSpacing: 0.3,
+                  color: color.white,
+                }}>
+                votes:{' '}
+              </Text>
               <Text
                 style={{
                   color: color.white,
-                  fontSize: width * 0.027,
+                  fontSize: width * 0.035,
                   fontFamily: Font.Medium,
+                  letterSpacing: 0.3,
                 }}>
                 {postVote.user2}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-              }}>
-              {/* <Image
-                source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
-                resizeMode="contain"
-                style={{
-                  width: 15,
-                  aspectRatio: 1,
-                  tintColor: 'rgba(255, 255, 255, 0.47)',
-                }}
-              /> */}
-              <Text style={{fontFamily: Font.Regular}}>disvote: </Text>
-              <Text
-                style={{
-                  color: color.white,
-                  fontSize: width * 0.027,
-                  fontFamily: Font.Medium,
-                }}>
-                {postDisVote.user2}
               </Text>
             </View>
           </View>
@@ -484,7 +505,7 @@ const PostWrapper = ({Post, goNext}) => {
               columnGap: 5,
               backgroundColor: voteIndi.user2 ? color.white : color.Bg,
               borderRadius: 50,
-              borderWidth: 1,
+              // borderWidth: 1,
               borderColor: 'rgb(255, 255, 255)',
             }}>
             <Text
@@ -501,7 +522,7 @@ const PostWrapper = ({Post, goNext}) => {
         </View>
       </View>
       {/* model for sho user clicked image for larger view */}
-      <Modal transparent={true} visible={isShowModel}>
+      <Modal transparent={true} visible={isShowModel} animationType="fade">
         <View
           style={{
             backgroundColor: 'rgba(0, 0, 0, 0.89)',
