@@ -73,7 +73,7 @@ const SignupScreen = () => {
       setLoadSubmit(true);
       const {data, status} = await axios.post(`${Api}/Login/signup`, {
         name: name.trim(),
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password: password.trim(),
         profile: image,
       });

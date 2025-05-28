@@ -74,7 +74,7 @@ const PostWrapper = ({Post, goNext}) => {
         ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
         console.error(error);
       } finally {
-        goNext();
+        // goNext();
       }
     },
     [Post],
@@ -96,59 +96,12 @@ const PostWrapper = ({Post, goNext}) => {
   return (
     <View
       style={{
-        // borderColor: 'white',
-        marginVertical: 'auto',
         width: width,
         alignSelf: 'center',
         height: height * 0.6,
         backgroundColor: color.black,
         borderWidth: 1,
       }}>
-      {/* show dominator */}
-      <LinearGradient
-        colors={[
-          Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote
-            ? 'rgb(235, 109, 109)'
-            : color.blue,
-          'rgba(0, 0, 0, 0.09)',
-        ]}
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'center',
-          columnGap: 5,
-        }}
-        start={{x: 0, y: 1}}
-        end={{x: 1, y: 0}}>
-        <FastImage
-          source={{uri: 'https://i.ibb.co/zWW0wqG0/security.png'}}
-          resizeMode="contain"
-          priority={FastImage.priority.high}
-          style={{width: 20, aspectRatio: 1}}
-        />
-        {Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote ? (
-          <Text
-            style={{
-              color: color.white,
-              fontFamily: Font.SemiBold,
-              letterSpacing: 0.4,
-            }}>
-            Tied
-          </Text>
-        ) : (
-          <Text
-            style={{
-              color: color.white,
-              fontFamily: Font.SemiBold,
-              letterSpacing: 0.4,
-            }}>
-            Dominator:{' '}
-            {Post?.user1.Post?.PostVote > Post?.user2?.Post?.PostVote
-              ? Post?.user1.username
-              : Post?.user2?.username}
-          </Text>
-        )}
-      </LinearGradient>
       {/* first user */}
       <View
         style={{
@@ -172,9 +125,6 @@ const PostWrapper = ({Post, goNext}) => {
               style={{
                 width: '100%',
                 height: '100%',
-                borderRadius: 10,
-                borderBottomRightRadius: 0,
-                borderTopLeftRadius: 0,
               }}
             />
           </TouchableOpacity>
@@ -205,7 +155,6 @@ const PostWrapper = ({Post, goNext}) => {
                 uri: Post?.user1?.profileImage,
                 priority: FastImage.priority.high,
               }}
-              // resizeMode="contain"
               style={{
                 width: 40,
                 aspectRatio: 1,
@@ -225,55 +174,82 @@ const PostWrapper = ({Post, goNext}) => {
           {/* image info */}
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'space-around',
+              justifyContent: 'center',
             }}>
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
-                rowGap: 2,
+                width: '100%',
               }}>
-              <FastImage
+              {/* <Image
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
-                resizeMode="contain"
-                style={{width: 15, aspectRatio: 1}}
-              />
-              <Text style={{color: color.white, fontSize: width * 0.027}}>
+                style={{
+                  width: 15,
+                  aspectRatio: 1,
+                  tintColor: 'rgba(255, 255, 255, 0.47)',
+                }}
+              /> */}
+              <Text style={{fontFamily: Font.Regular}}>streak: </Text>
+              <Text
+                style={{
+                  color: color.white,
+                  fontSize: width * 0.027,
+                  fontFamily: Font.Medium,
+                }}>
                 {postStreak.user1}
               </Text>
             </View>
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
-                rowGap: 2,
+                width: '100%',
               }}>
-              <FastImage
+              {/* <Image
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
-                resizeMode="contain"
-                style={{width: 15, aspectRatio: 1}}
-              />
-              <Text style={{color: color.white, fontSize: width * 0.027}}>
+                style={{
+                  width: 15,
+                  aspectRatio: 1,
+                  tintColor: 'rgba(255, 255, 255, 0.47)',
+                }}
+              /> */}
+              <Text style={{fontFamily: Font.Regular}}>vote: </Text>
+              <Text
+                style={{
+                  color: color.white,
+                  fontSize: width * 0.027,
+                  fontFamily: Font.Medium,
+                }}>
                 {postVote.user1}
               </Text>
             </View>
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
-                rowGap: 2,
+                width: '100%',
               }}>
-              <FastImage
+              {/* <Image
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
-                resizeMode="contain"
-                style={{width: 15, aspectRatio: 1}}
-              />
-              <Text style={{color: color.white, fontSize: width * 0.027}}>
+                style={{
+                  width: 15,
+                  aspectRatio: 1,
+                  tintColor: 'rgba(255, 255, 255, 0.47)',
+                }}
+              /> */}
+              <Text style={{fontFamily: Font.Regular}}>disvote: </Text>
+              <Text
+                style={{
+                  color: color.white,
+                  fontSize: width * 0.027,
+                  fontFamily: Font.Medium,
+                }}>
                 {postDisVote.user1}
               </Text>
             </View>
@@ -289,6 +265,8 @@ const PostWrapper = ({Post, goNext}) => {
               columnGap: 5,
               backgroundColor: voteIndi.user1 ? color.white : color.Bg,
               borderRadius: 50,
+              borderWidth: 1,
+              borderColor: 'rgb(255, 255, 255)',
             }}>
             <Text
               style={{
@@ -303,6 +281,48 @@ const PostWrapper = ({Post, goNext}) => {
           </TouchableOpacity>
         </View>
       </View>
+      {/* show dominator */}
+      <LinearGradient
+        colors={[
+          Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote
+            ? 'rgb(235, 109, 109)'
+            : 'rgba(33, 72, 95, 0.64)',
+          'rgba(0, 0, 0, 0.09)',
+        ]}
+        style={{
+          padding: 10,
+          flexDirection: 'row',
+          alignItems: 'center',
+          columnGap: 5,
+        }}
+        start={{x: 0, y: 1}}
+        end={{x: 1, y: 0}}>
+        {Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostDisVote ? (
+          <Text
+            style={{
+              color: color.white,
+              fontFamily: Font.SemiBold,
+              letterSpacing: 0.4,
+              textAlign: 'center',
+            }}>
+            Tied
+          </Text>
+        ) : (
+          <Text
+            style={{
+              color: color.white,
+              fontFamily: Font.SemiBold,
+              letterSpacing: 0.4,
+              textAlign: 'center',
+              width: '100%',
+            }}>
+            Dominator:{' '}
+            {Post?.user1.Post?.PostVote > Post?.user2?.Post?.PostVote
+              ? Post?.user1.username
+              : Post?.user2?.username}
+          </Text>
+        )}
+      </LinearGradient>
       {/* second user */}
       <View
         style={{
@@ -323,8 +343,6 @@ const PostWrapper = ({Post, goNext}) => {
               style={{
                 width: '100%',
                 height: '100%',
-                borderRadius: 10,
-                borderTopLeftRadius: 0,
               }}
             />
           </TouchableOpacity>
@@ -346,10 +364,11 @@ const PostWrapper = ({Post, goNext}) => {
               flexDirection: 'row',
               alignItems: 'center',
               columnGap: 8,
-              // backgroundColor: color.Bg,
               padding: 10,
               borderRadius: 10,
               justifyContent: 'flex-start',
+              // borderWidth: 1,
+              borderColor: 'red',
             }}>
             <FastImage
               source={{
@@ -357,7 +376,7 @@ const PostWrapper = ({Post, goNext}) => {
                 priority: FastImage.priority.high,
               }}
               // resizeMode="contain"
-              style={{width: 40, aspectRatio: 1, borderRadius: 50}}
+              style={{width: 50, aspectRatio: 1, borderRadius: 50}}
             />
             <Text
               style={{
@@ -372,55 +391,84 @@ const PostWrapper = ({Post, goNext}) => {
           {/* image info */}
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'space-around',
             }}>
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
-                rowGap: 2,
+                width: '100%',
               }}>
-              <FastImage
+              {/* <Image
                 source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
-                resizeMode="contain"
-                style={{width: 15, aspectRatio: 1}}
-              />
-              <Text style={{color: color.white, fontSize: width * 0.027}}>
+                style={{
+                  width: 15,
+                  aspectRatio: 1,
+                  tintColor: 'rgba(255, 255, 255, 0.47)',
+                }}
+              /> */}
+              <Text style={{fontFamily: Font.Regular}}>streak: </Text>
+              <Text
+                style={{
+                  color: color.white,
+                  fontSize: width * 0.027,
+                  fontFamily: Font.Medium,
+                }}>
                 {postStreak.user2}
               </Text>
             </View>
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
-                rowGap: 2,
+                width: '100%',
               }}>
-              <FastImage
+              {/* <Image
                 source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
-                resizeMode="contain"
-                style={{width: 15, aspectRatio: 1}}
-              />
-              <Text style={{color: color.white, fontSize: width * 0.027}}>
+                // resizeMode="contain"
+                style={{
+                  width: 15,
+                  aspectRatio: 1,
+                  tintColor: 'rgba(255, 255, 255, 0.47)',
+                }}
+              /> */}
+              <Text style={{fontFamily: Font.Regular}}>vote: </Text>
+              <Text
+                style={{
+                  color: color.white,
+                  fontSize: width * 0.027,
+                  fontFamily: Font.Medium,
+                }}>
                 {postVote.user2}
               </Text>
             </View>
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
-                rowGap: 2,
+                width: '100%',
               }}>
-              <FastImage
+              {/* <Image
                 source={{uri: 'https://i.ibb.co/w3LB3gg/decrease.png'}}
                 resizeMode="contain"
-                style={{width: 15, aspectRatio: 1}}
-              />
-              <Text style={{color: color.white, fontSize: width * 0.027}}>
+                style={{
+                  width: 15,
+                  aspectRatio: 1,
+                  tintColor: 'rgba(255, 255, 255, 0.47)',
+                }}
+              /> */}
+              <Text style={{fontFamily: Font.Regular}}>disvote: </Text>
+              <Text
+                style={{
+                  color: color.white,
+                  fontSize: width * 0.027,
+                  fontFamily: Font.Medium,
+                }}>
                 {postDisVote.user2}
               </Text>
             </View>
@@ -436,6 +484,8 @@ const PostWrapper = ({Post, goNext}) => {
               columnGap: 5,
               backgroundColor: voteIndi.user2 ? color.white : color.Bg,
               borderRadius: 50,
+              borderWidth: 1,
+              borderColor: 'rgb(255, 255, 255)',
             }}>
             <Text
               style={{

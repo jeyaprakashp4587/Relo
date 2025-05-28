@@ -25,6 +25,8 @@ const TabNavigation = () => {
           borderColor: 'white',
           height: height * 0.075,
         },
+        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.47)',
+        tabBarActiveTintColor: color.white,
         tabBarItemStyle: {
           flexDirection: 'row',
           justifyContent: 'center',
@@ -36,13 +38,16 @@ const TabNavigation = () => {
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: () => (
+          tabBarIcon: ({color, focused}) => (
             <Image
               source={{uri: 'https://i.ibb.co/DD0gmYp/home.png'}}
-              style={{width: 22, aspectRatio: 1}}
+              style={{
+                width: 22,
+                aspectRatio: 1,
+                tintColor: color,
+              }}
             />
           ),
-          // tabBarShowLabel: false,
         }}
       />
 
@@ -50,35 +55,30 @@ const TabNavigation = () => {
         name="Post"
         component={Post}
         options={{
-          tabBarIcon: () => (
+          tabBarIcon: ({color, focused}) => (
             <Image
               source={{uri: 'https://i.ibb.co/WWg5vdF/plus.png'}}
-              style={{width: 20, aspectRatio: 1, tintColor: 'black'}}
+              style={{
+                width: 20,
+                aspectRatio: 1,
+                tintColor: color,
+              }}
             />
           ),
-          // tabBarIconStyle: {
-          //   position: 'absolute',
-          //   top: -43,
-          //   backgroundColor: 'black',
-          //   borderWidth: 5,
-          //   borderRadius: 50,
-          //   width: 70,
-          //   height: 70,
-          // },
-          // tabBarItemStyle: {
-          //   justifyContent: 'center',
-          //   alignItems: 'center',
-          // },
         }}
       />
       <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: () => (
+          tabBarIcon: ({color, focused}) => (
             <Image
               source={{uri: 'https://i.ibb.co/9Vck1rW/people.png'}}
-              style={{width: 25, aspectRatio: 1}}
+              style={{
+                width: 25,
+                aspectRatio: 1,
+                tintColor: color,
+              }}
             />
           ),
           // tabBarShowLabel: false,

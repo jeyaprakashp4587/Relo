@@ -107,7 +107,6 @@ const SignIn = ({navigation}) => {
           placeholder="Enter email"
           placeholderTextColor="#888"
           keyboardType="email-address"
-          autoCapitalize="none"
         />
 
         <Text style={styles.label}>Password</Text>
@@ -123,7 +122,7 @@ const SignIn = ({navigation}) => {
         <LinearGradient colors={['#114281', '#093466']} style={styles.button}>
           <TouchableOpacity onPress={handleLogin} disabled={loading}>
             {loading ? (
-              <ActivityIndicator color="white" size={26} />
+              <ActivityIndicator color="white" size={25} />
             ) : (
               <Text style={styles.buttonText}>Sign In</Text>
             )}

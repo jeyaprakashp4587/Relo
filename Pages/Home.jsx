@@ -68,7 +68,9 @@ const Home = () => {
       style={{
         flex: 1,
         backgroundColor: color.black,
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
+        // borderWidth: 1,
+        // borderColor: 'red',
       }}>
       {/* Header */}
       <View
@@ -77,6 +79,8 @@ const Home = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           paddingVertical: 10,
+          // borderWidth: 1,
+          borderColor: 'red',
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
@@ -95,7 +99,13 @@ const Home = () => {
         </TouchableOpacity>
       </View>
       {/* Banner Ad */}
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          // borderWidth: 1,
+          borderColor: 'red',
+        }}>
         <BannerAd
           unitId={
             __DEV__ ? TestIds.BANNER : 'ca-app-pub-3257747925516984/6972244634'
@@ -109,7 +119,7 @@ const Home = () => {
         <Carousel
           ref={carouselRef}
           width={width}
-          height={height * 0.65}
+          // height={height * 0.6}
           data={randomPost}
           renderItem={renderItem}
           scrollAnimationDuration={1000}
@@ -137,7 +147,7 @@ const Home = () => {
         </View>
       )}
       {/* Tutorial Text */}
-      <Text
+      {/* <Text
         style={{
           color: 'rgba(124, 128, 128, 0.92)',
           fontFamily: Font.SemiBold,
@@ -146,7 +156,7 @@ const Home = () => {
           textAlign: 'center',
         }}>
         Swipe to see
-      </Text>
+      </Text> */}
     </View>
   );
 };
