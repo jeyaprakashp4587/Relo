@@ -9,6 +9,7 @@ import {
   View,
   ActivityIndicator,
   ToastAndroid,
+  ImageBackground,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import Navigation from '../Navigation/Navigation';
@@ -53,6 +54,8 @@ const SignIn = ({navigation}) => {
           response.data.user?._id.toString(),
         );
         setUser(response.data?.user);
+        console.log(response.data?.user);
+
         navigation.replace('Tab');
       }
     } catch (error) {
@@ -84,66 +87,89 @@ const SignIn = ({navigation}) => {
   return (
     <ScrollView
       style={{
-        backgroundColor: color.black,
         flex: 1,
         paddingBottom: 20,
         padding: 0,
       }}>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <FastImage
-          source={require('../assets/ic_launcher_round.png')}
-          resizeMode="contain"
-          priority={FastImage.priority.high}
-          style={{width: width * 0.75, aspectRatio: 1}}
-        />
-      </View>
+      <ImageBackground
+        source={{
+          uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
+        }}
+        style={{
+          flex: 1,
+          height: height,
+          justifyContent: 'space-around',
+        }}>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <FastImage
+            source={require('../assets/Relo.png')}
+            resizeMode="contain"
+            priority={FastImage.priority.high}
+            style={{width: width * 0.75, aspectRatio: 1}}
+          />
+        </View>
+        <View style={{paddingHorizontal: 25, rowGap: 10}}>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Enter email"
+            placeholderTextColor="#888"
+            // keyboardType="email-address"
+          />
 
-      <View style={{paddingHorizontal: 25, rowGap: 10}}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Enter email"
-          placeholderTextColor="#888"
-          keyboardType="email-address"
-        />
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Enter password"
+            placeholderTextColor="#888"
+            secureTextEntry
+          />
 
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Enter password"
-          placeholderTextColor="#888"
-          secureTextEntry
-        />
-
-        <LinearGradient colors={['#114281', '#093466']} style={styles.button}>
-          <TouchableOpacity onPress={handleLogin} disabled={loading}>
-            {loading ? (
-              <ActivityIndicator color="white" size={25} />
-            ) : (
-              <Text style={styles.buttonText}>Sign In</Text>
-            )}
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient colors={['#f5f5f5', '#ffffff']} style={styles.button}>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text
+          <LinearGradient colors={['#114281', '#093466']} style={styles.button}>
+            <TouchableOpacity
+              onPress={handleLogin}
+              disabled={loading}
               style={{
-                color: color.black,
-                fontFamily: Font.Medium,
-                textAlign: 'center',
-                letterSpacing: 0.3,
-                fontSize: width * 0.04,
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              Create New Account
-            </Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
+              {loading ? (
+                <ActivityIndicator color="white" size={25} />
+              ) : (
+                <Text style={styles.buttonText}>Sign In</Text>
+              )}
+            </TouchableOpacity>
+          </LinearGradient>
+
+          <LinearGradient colors={['#f5f5f5', '#ffffff']} style={styles.button}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('SignUp')}
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: color.black,
+                  fontFamily: Font.Medium,
+                  textAlign: 'center',
+                  // letterSpacing: 0.3,
+                  fontSize: width * 0.04,
+                }}>
+                Create New Account
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
+      </ImageBackground>
     </ScrollView>
   );
 };
@@ -168,6 +194,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.Medium,
     fontSize: width * 0.035,
     paddingLeft: 0,
+    cursor: 'red',
   },
   button: {
     // padding: 10,

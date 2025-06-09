@@ -40,7 +40,7 @@ const Splash = () => {
         alignItems: 'center',
       }}>
       <FastImage
-        source={require('../assets/ic_launcher_round.png')}
+        source={require('../assets/Relo.png')}
         style={{width: width * 0.8, aspectRatio: 1}}
         priority={FastImage.priority.high}
         resizeMode="contain"

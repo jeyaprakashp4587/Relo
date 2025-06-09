@@ -84,9 +84,9 @@ const PostWrapper = ({Post, goNext}) => {
       style={{
         width: width,
         alignSelf: 'center',
-        height: height * 0.6,
+        height: height * 0.7,
         backgroundColor: color.black,
-        borderWidth: 1,
+        // borderWidth: 1,
       }}>
       {/* first user */}
       <View
@@ -96,7 +96,7 @@ const PostWrapper = ({Post, goNext}) => {
           flexDirection: 'row',
           flex: 1,
         }}>
-        <View style={{borderWidth: 0, borderColor: 'red', width: '50%'}}>
+        <View style={{borderWidth: 0, borderColor: 'red', width: '60%'}}>
           <TouchableOpacity
             onPress={() => {
               setIsShowModel(true);
@@ -146,7 +146,7 @@ const PostWrapper = ({Post, goNext}) => {
         </View>
         <View
           style={{
-            borderWidth: 0,
+            // borderWidth: 1,
             borderColor: 'red',
             flex: 1,
             padding: 15,
@@ -154,11 +154,12 @@ const PostWrapper = ({Post, goNext}) => {
             justifyContent: 'space-around',
             rowGap: 5,
             backgroundColor: color.black,
+            alignItems: 'center',
           }}>
           {/* profile info */}
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               alignItems: 'center',
               columnGap: 8,
               padding: 10,
@@ -215,7 +216,7 @@ const PostWrapper = ({Post, goNext}) => {
                   letterSpacing: 0.3,
                   color: color.white,
                 }}>
-                streak:{' '}
+                Streak:{' '}
               </Text>
               <Text
                 style={{
@@ -248,7 +249,7 @@ const PostWrapper = ({Post, goNext}) => {
                   letterSpacing: 0.3,
                   color: color.white,
                 }}>
-                votes:{' '}
+                Votes:{' '}
               </Text>
               <Text
                 style={{
@@ -267,11 +268,12 @@ const PostWrapper = ({Post, goNext}) => {
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
-              columnGap: 5,
+              rowGap: 5,
               backgroundColor: voteIndi.user1 ? color.white : color.Bg,
               borderRadius: 50,
               height: height * 0.044,
               borderColor: 'rgb(255, 255, 255)',
+              width: '100%',
             }}>
             <Text
               style={{
@@ -334,7 +336,7 @@ const PostWrapper = ({Post, goNext}) => {
           flexDirection: 'row-reverse',
           flex: 1,
         }}>
-        <View style={{borderWidth: 0, borderColor: 'red', width: '50%'}}>
+        <View style={{borderWidth: 0, borderColor: 'red', width: '60%'}}>
           <TouchableOpacity
             onPress={() => {
               setIsShowModel(true);
@@ -383,26 +385,26 @@ const PostWrapper = ({Post, goNext}) => {
         </View>
         <View
           style={{
-            borderWidth: 0,
+            // borderWidth: 2,
             borderColor: 'red',
             padding: 15,
-            width: '50%',
             flexDirection: 'column',
             justifyContent: 'space-around',
             rowGap: 5,
             backgroundColor: color.black,
+            alignItems: 'center',
+            flex: 1,
           }}>
           {/* profile info */}
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               alignItems: 'center',
-              columnGap: 8,
               padding: 10,
               borderRadius: 10,
-              justifyContent: 'flex-start',
-              // borderWidth: 1,
+              justifyContent: 'center',
               borderColor: 'red',
+              rowGap: 5,
             }}>
             <FastImage
               source={{
@@ -443,7 +445,7 @@ const PostWrapper = ({Post, goNext}) => {
                   letterSpacing: 0.3,
                   color: color.white,
                 }}>
-                streak:{' '}
+                Streak:{' '}
               </Text>
               <Text
                 style={{
@@ -478,7 +480,7 @@ const PostWrapper = ({Post, goNext}) => {
                   letterSpacing: 0.3,
                   color: color.white,
                 }}>
-                votes:{' '}
+                Votes:{' '}
               </Text>
               <Text
                 style={{
@@ -501,9 +503,9 @@ const PostWrapper = ({Post, goNext}) => {
               columnGap: 5,
               backgroundColor: voteIndi.user2 ? color.white : color.Bg,
               borderRadius: 50,
-              // borderWidth: 1,
               borderColor: 'rgb(255, 255, 255)',
               height: height * 0.044,
+              width: '100%',
             }}>
             <Text
               style={{

@@ -143,7 +143,7 @@ const Home = () => {
         <Carousel
           ref={carouselRef}
           width={width}
-          height={height * 0.6}
+          height={height * 0.7}
           data={randomPost}
           renderItem={renderItem}
           scrollAnimationDuration={1000}

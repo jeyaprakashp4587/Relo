@@ -186,7 +186,7 @@ const SignupScreen = () => {
         {/* Step 1 */}
         <View style={styles.step}>
           <View style={styles.content}>
-            <Text style={styles.label}>What's your name?</Text>
+            <Text style={styles.label}>What's your{'\n'}name?</Text>
             <TextInput
               ref={nameRef}
               style={[styles.input, errors.name ? styles.errorInput : null]}
@@ -205,7 +205,14 @@ const SignupScreen = () => {
           <LinearGradient
             colors={['rgb(17, 66, 129)', 'rgb(9, 52, 102)']}
             style={styles.button}>
-            <TouchableOpacity onPress={goToNextStep}>
+            <TouchableOpacity
+              onPress={goToNextStep}
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
           </LinearGradient>
@@ -213,7 +220,7 @@ const SignupScreen = () => {
         {/* Step 2 */}
         <View style={styles.step}>
           <View style={styles.content}>
-            <Text style={styles.label}>Enter your email</Text>
+            <Text style={styles.label}>Enter your{'\n'}email</Text>
             <TextInput
               ref={emailRef}
               style={[styles.input, errors.email ? styles.errorInput : null]}
@@ -222,7 +229,6 @@ const SignupScreen = () => {
                 setEmail(text);
                 setErrors({...errors, email: ''});
               }}
-              keyboardType="email-address"
               placeholder="Enter email"
               placeholderTextColor="#888"
             />
@@ -233,7 +239,14 @@ const SignupScreen = () => {
           <LinearGradient
             colors={['rgb(17, 66, 129)', 'rgb(9, 52, 102)']}
             style={styles.button}>
-            <TouchableOpacity onPress={goToNextStep}>
+            <TouchableOpacity
+              onPress={goToNextStep}
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
           </LinearGradient>
@@ -241,7 +254,7 @@ const SignupScreen = () => {
         {/* Step 3 */}
         <View style={styles.step}>
           <View style={styles.content}>
-            <Text style={styles.label}>Create a password</Text>
+            <Text style={styles.label}>Create a{'\n'}password</Text>
             <TextInput
               ref={passwordRef}
               style={[styles.input, errors.password ? styles.errorInput : null]}
@@ -261,7 +274,14 @@ const SignupScreen = () => {
           <LinearGradient
             colors={['rgb(17, 66, 129)', 'rgb(9, 52, 102)']}
             style={styles.button}>
-            <TouchableOpacity onPress={goToNextStep}>
+            <TouchableOpacity
+              onPress={goToNextStep}
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
           </LinearGradient>
@@ -269,7 +289,7 @@ const SignupScreen = () => {
         {/* step 4 */}
         <View style={styles.step}>
           <View style={styles.content}>
-            <Text style={styles.label}>Upload a Profile Photo</Text>
+            <Text style={styles.label}>Upload a{'\n'}Profile Photo</Text>
             <FastImage
               source={{
                 uri: image ? image : 'https://i.ibb.co/Y4NtjRR0/user.png',
@@ -290,7 +310,14 @@ const SignupScreen = () => {
           <LinearGradient
             colors={['rgb(17, 66, 129)', 'rgb(9, 52, 102)']}
             style={styles.button}>
-            <TouchableOpacity onPress={selectImage}>
+            <TouchableOpacity
+              onPress={selectImage}
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               {hostImageIndi ? (
                 <ActivityIndicator color={color.white} size={28} />
               ) : (
@@ -352,7 +379,14 @@ const SignupScreen = () => {
           <LinearGradient
             colors={['rgb(17, 66, 129)', 'rgb(9, 52, 102)']}
             style={styles.button}>
-            <TouchableOpacity onPress={handleSubmit}>
+            <TouchableOpacity
+              onPress={handleSubmit}
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               {loadSubmit ? (
                 <ActivityIndicator color={color.white} size={28} />
               ) : (
@@ -424,10 +458,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    fontSize: width * 0.09,
+    fontSize: width * 0.13,
     marginBottom: 10,
     fontFamily: Font.SemiBold,
-    width: '80%',
     color: color.white,
   },
   input: {
@@ -456,14 +489,14 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: 'center',
     width: '100%',
-    height: height * 0.055,
+    height: height * 0.065,
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
     fontFamily: Font.Medium,
     textAlign: 'center',
-    letterSpacing: 0.3,
+    // letterSpacing: 0.3,
     fontSize: width * 0.04,
     color: 'white',
   },

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import Navigation from './Navigation/Navigation';
 import {StatusBar} from 'react-native';
 import {color} from './Const/Color';
@@ -17,11 +17,10 @@ const App = () => {
   return (
     <GestureHandlerRootView>
       <ContextProvider>
-        <SafeAreaView
-          style={{flex: 1, paddingTop: 0, backgroundColor: color.black}}>
+        <SafeAreaProvider>
           <Navigation />
           <StatusBar barStyle="light-content" backgroundColor={color.black} />
-        </SafeAreaView>
+        </SafeAreaProvider>
       </ContextProvider>
     </GestureHandlerRootView>
   );
