@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ToastAndroid,
+  ImageBackground,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -64,13 +65,14 @@ const Home = () => {
     [goToNext],
   );
   return (
-    <View
+    <ImageBackground
+      source={{
+        uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
+      }}
       style={{
         flex: 1,
         backgroundColor: color.black,
-        justifyContent: 'space-around',
-        // borderWidth: 1,
-        // borderColor: 'red',
+        justifyContent: 'space-between',
       }}>
       {/* Header */}
       <View
@@ -79,8 +81,8 @@ const Home = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           paddingVertical: 10,
-          // borderWidth: 1,
           borderColor: 'red',
+          alignItems: 'center',
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
@@ -94,6 +96,29 @@ const Home = () => {
               borderRadius: 50,
               borderWidth: 3,
               borderColor: 'white',
+            }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            borderWidth: 1,
+            borderColor: color.white,
+            width: 30,
+            aspectRatio: 1,
+            padding: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 100,
+          }}>
+          <FastImage
+            source={{
+              uri: 'https://i.ibb.co/Zp7k47Pt/notification-bell.png',
+              priority: FastImage.priority.high,
+            }}
+            resizeMode="contain"
+            style={{
+              width: 30,
+              aspectRatio: 1,
             }}
           />
         </TouchableOpacity>
@@ -145,18 +170,7 @@ const Home = () => {
           ))}
         </View>
       )}
-      {/* Tutorial Text */}
-      {/* <Text
-        style={{
-          color: 'rgba(124, 128, 128, 0.92)',
-          fontFamily: Font.SemiBold,
-          fontSize: width * 0.035,
-          paddingBottom: 20,
-          textAlign: 'center',
-        }}>
-        Swipe to see
-      </Text> */}
-    </View>
+    </ImageBackground>
   );
 };
 export default Home;

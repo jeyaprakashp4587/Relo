@@ -123,11 +123,14 @@ const PostWrapper = ({Post, goNext}) => {
                 position: 'absolute',
                 borderWidth: 1,
                 borderColor: color.black,
-                padding: 2,
+                // padding: 2,
                 borderRadius: 100,
                 width: '60%',
                 alignSelf: 'center',
                 bottom: 10,
+                height: height * 0.04,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
               <Text
                 style={{
@@ -148,7 +151,7 @@ const PostWrapper = ({Post, goNext}) => {
             flex: 1,
             padding: 15,
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: 'space-around',
             rowGap: 5,
             backgroundColor: color.black,
           }}>
@@ -261,14 +264,13 @@ const PostWrapper = ({Post, goNext}) => {
           <TouchableOpacity
             onPress={() => !voteIndi.user1 && handleVote('user1')}
             style={{
-              padding: 5,
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
               columnGap: 5,
               backgroundColor: voteIndi.user1 ? color.white : color.Bg,
               borderRadius: 50,
-              // borderWidth: 1,
+              height: height * 0.044,
               borderColor: 'rgb(255, 255, 255)',
             }}>
             <Text
@@ -363,6 +365,9 @@ const PostWrapper = ({Post, goNext}) => {
                 width: '60%',
                 alignSelf: 'center',
                 bottom: 10,
+                height: height * 0.04,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
               <Text
                 style={{
@@ -383,7 +388,7 @@ const PostWrapper = ({Post, goNext}) => {
             padding: 15,
             width: '50%',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: 'space-around',
             rowGap: 5,
             backgroundColor: color.black,
           }}>
@@ -431,14 +436,6 @@ const PostWrapper = ({Post, goNext}) => {
                 alignItems: 'center',
                 width: '100%',
               }}>
-              {/* <Image
-                source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
-                style={{
-                  width: 15,
-                  aspectRatio: 1,
-                  tintColor: 'rgba(255, 255, 255, 0.47)',
-                }}
-              /> */}
               <Text
                 style={{
                   fontFamily: Font.Regular,
@@ -498,7 +495,6 @@ const PostWrapper = ({Post, goNext}) => {
           <TouchableOpacity
             onPress={() => !voteIndi.user2 && handleVote('user2')}
             style={{
-              padding: 5,
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
@@ -507,6 +503,7 @@ const PostWrapper = ({Post, goNext}) => {
               borderRadius: 50,
               // borderWidth: 1,
               borderColor: 'rgb(255, 255, 255)',
+              height: height * 0.044,
             }}>
             <Text
               style={{

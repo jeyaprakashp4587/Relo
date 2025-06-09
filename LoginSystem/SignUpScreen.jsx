@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ToastAndroid,
+  ImageBackground,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
@@ -27,7 +28,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useData} from '../Context/Contexter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const SignupScreen = () => {
   const navigation = useNavigation();
@@ -172,7 +173,15 @@ const SignupScreen = () => {
     }
   }, []);
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={{
+        uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
+      }}
+      style={{
+        flex: 1,
+
+        justifyContent: 'center',
+      }}>
       <Animated.View style={[styles.slider, animatedStyle]}>
         {/* Step 1 */}
         <View style={styles.step}>
@@ -355,7 +364,7 @@ const SignupScreen = () => {
       </Animated.View>
       {/* Pagination Dots */}
       <PaginationDots stepOffset={offset} />
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -443,10 +452,13 @@ const styles = StyleSheet.create({
     fontSize: width * 0.025,
   },
   button: {
-    padding: 10,
+    // padding: 10,
     borderRadius: 50,
     alignSelf: 'center',
     width: '100%',
+    height: height * 0.055,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     fontFamily: Font.Medium,

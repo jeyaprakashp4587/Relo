@@ -1,4 +1,11 @@
-import {View, Text, Dimensions, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  ImageBackground,
+} from 'react-native';
 import React from 'react';
 import {color} from '../Const/Color';
 import {Font} from '../Const/Font';
@@ -13,7 +20,11 @@ const Profile = () => {
   console.log(user?.Post);
 
   return (
-    <View style={{backgroundColor: color.black, flex: 1}}>
+    <ImageBackground
+      source={{
+        uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
+      }}
+      style={{flex: 1}}>
       <Text
         style={{
           paddingHorizontal: 15,
@@ -202,7 +213,7 @@ const Profile = () => {
           </Text>
         </View>
       )}
-    </View>
+    </ImageBackground>
   );
 };
 

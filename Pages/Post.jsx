@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Dimensions,
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -90,9 +91,12 @@ const Post = () => {
     }
   }, [image, user]);
   return (
-    <ScrollView
-      style={{backgroundColor: color.black, flex: 1, paddingHorizontal: 15}}>
-      <View>
+    <ScrollView style={{backgroundColor: color.black, flex: 1}}>
+      <ImageBackground
+        source={{
+          uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
+        }}
+        style={{flex: 1, height: height * 1, paddingHorizontal: 15}}>
         <Text
           style={{
             color: color.white,
@@ -187,7 +191,7 @@ const Post = () => {
             )}
           </TouchableOpacity>
         )}
-      </View>
+      </ImageBackground>
     </ScrollView>
   );
 };
