@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../Pages/Home';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, Image, View, Platform} from 'react-native';
 import {color} from '../Const/Color';
 import Profile from '../Pages/Profile';
 import Post from '../Pages/Post';
@@ -20,18 +20,18 @@ const TabNavigation = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'rgb(31, 30, 30)',
+          backgroundColor: 'rgb(0, 0, 0)',
           borderTopWidth: 0,
-          borderColor: 'white',
-          height: height * 0.075,
+          height: height * 0.085, // slightly more height
+          paddingBottom: Platform.OS === 'android' ? 6 : 20,
+        },
+        tabBarItemStyle: {
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingTop: 6,
         },
         tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.47)',
         tabBarActiveTintColor: color.white,
-        tabBarItemStyle: {
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
         tabBarShowLabel: false,
       }}>
       <Tab.Screen
@@ -55,6 +55,7 @@ const TabNavigation = () => {
         name="Post"
         component={Post}
         options={{
+          animation: 'fade',
           tabBarIcon: ({color, focused}) => (
             <Image
               source={{uri: 'https://i.ibb.co/WWg5vdF/plus.png'}}
@@ -71,6 +72,7 @@ const TabNavigation = () => {
         name="Profile"
         component={Profile}
         options={{
+          animation: 'fade',
           tabBarIcon: ({color, focused}) => (
             <Image
               source={{uri: 'https://i.ibb.co/9Vck1rW/people.png'}}
@@ -93,10 +95,26 @@ const StackNavigation = () => {
     <Stack.Navigator
       initialRouteName="Splash"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Splash" component={Splash} />
-      <Stack.Screen name="Tab" component={TabNavigation} />
-      <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="SignUp" component={SignupScreen} />
+      <Stack.Screen
+        name="Splash"
+        component={Splash}
+        options={{animation: 'fade_from_bottom'}}
+      />
+      <Stack.Screen
+        name="Tab"
+        component={TabNavigation}
+        options={{animation: 'slide_from_right'}}
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignIn}
+        options={{animation: 'slide_from_bottom'}}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignupScreen}
+        options={{animation: 'slide_from_right'}}
+      />
     </Stack.Navigator>
   );
 };

@@ -33,8 +33,12 @@ const PostWrapper = ({Post, goNext}) => {
     user1: Post?.user1?.Post?.PostStreak || 0,
     user2: Post?.user2?.Post?.PostStreak || 0,
   });
+  const [isVoting, setIsVoting] = useState(false);
   const handleVote = useCallback(
     async user => {
+      if (isVoting) return;
+      setIsVoting(true);
+
       try {
         const {data, status} = await axios.post(`${Api}/Post/vote`, {
           winner: user === 'user1' ? Post?.user1?._id : Post?.user2?._id,
@@ -45,30 +49,39 @@ const PostWrapper = ({Post, goNext}) => {
             user === 'user1' ? Post?.user2?.Post?._id : Post?.user1?.Post?._id,
           voter: user?._id,
         });
+
         if (status === 200) {
           if (user === 'user1') {
             setPostVote(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
-            setPostStreak(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
-            setPostStreak(prev => ({...prev, user2: 0}));
+            setPostStreak(prev => ({
+              ...prev,
+              user1: (prev.user1 || 0) + 1,
+              user2: 0,
+            }));
             setPostVote(prev => ({...prev, user2: (prev.user2 || 0) - 1}));
             setVoteIndi({user1: true, user2: false});
           } else {
             setPostVote(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
-            setPostStreak(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
+            setPostStreak(prev => ({
+              ...prev,
+              user2: (prev.user2 || 0) + 1,
+              user1: 0,
+            }));
             setPostVote(prev => ({...prev, user1: (prev.user1 || 0) - 1}));
-            setPostStreak(prev => ({...prev, user1: 0}));
             setVoteIndi({user1: false, user2: true});
           }
+          goNext();
         }
       } catch (error) {
         ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
         console.error(error);
       } finally {
-        // goNext();
+        setIsVoting(false);
       }
     },
-    [Post],
+    [Post, goNext, isVoting],
   );
+
   useEffect(() => {
     setPostVote({
       user1: Post?.user1?.Post?.PostVote || 0,
@@ -146,7 +159,6 @@ const PostWrapper = ({Post, goNext}) => {
         </View>
         <View
           style={{
-            // borderWidth: 1,
             borderColor: 'red',
             flex: 1,
             padding: 15,
@@ -161,7 +173,7 @@ const PostWrapper = ({Post, goNext}) => {
             style={{
               flexDirection: 'column',
               alignItems: 'center',
-              columnGap: 8,
+              rowGap: 5,
               padding: 10,
               borderRadius: 10,
               justifyContent: 'flex-start',
@@ -181,7 +193,7 @@ const PostWrapper = ({Post, goNext}) => {
               style={{
                 color: color.white,
                 fontFamily: Font.SemiBold,
-                fontSize: width * 0.036,
+                fontSize: width * 0.04,
                 letterSpacing: 0.2,
               }}>
               {Post?.user1?.username}
@@ -201,19 +213,11 @@ const PostWrapper = ({Post, goNext}) => {
                 alignItems: 'center',
                 width: '100%',
               }}>
-              {/* <Image
-                source={{uri: 'https://i.ibb.co/VrbW9xf/bolt.png'}}
-                style={{
-                  width: 15,
-                  aspectRatio: 1,
-                  tintColor: 'rgba(255, 255, 255, 0.47)',
-                }}
-              /> */}
               <Text
                 style={{
                   fontFamily: Font.Regular,
                   fontSize: width * 0.035,
-                  letterSpacing: 0.3,
+
                   color: color.white,
                 }}>
                 Streak:{' '}
@@ -234,19 +238,11 @@ const PostWrapper = ({Post, goNext}) => {
                 alignItems: 'center',
                 width: '100%',
               }}>
-              {/* <Image
-                source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
-                style={{
-                  width: 15,
-                  aspectRatio: 1,
-                  tintColor: 'rgba(255, 255, 255, 0.47)',
-                }}
-              /> */}
               <Text
                 style={{
                   fontFamily: Font.Regular,
                   fontSize: width * 0.035,
-                  letterSpacing: 0.3,
+                  // letterSpacing: 0.3,
                   color: color.white,
                 }}>
                 Votes:{' '}
@@ -263,6 +259,7 @@ const PostWrapper = ({Post, goNext}) => {
           </View>
           {/* vote button */}
           <TouchableOpacity
+            disabled={isVoting}
             onPress={() => !voteIndi.user1 && handleVote('user1')}
             style={{
               flexDirection: 'row',
@@ -281,9 +278,9 @@ const PostWrapper = ({Post, goNext}) => {
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
-                letterSpacing: 0.3,
+                // letterSpacing: 0.3,
               }}>
-              {voteIndi.user1 ? 'voted' : 'vote'}
+              {voteIndi.user1 ? 'Voted' : 'Vote'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -311,6 +308,7 @@ const PostWrapper = ({Post, goNext}) => {
               fontFamily: Font.SemiBold,
               letterSpacing: 0.4,
               textAlign: 'center',
+              width: '100%',
             }}>
             Tied
           </Text>
@@ -418,7 +416,7 @@ const PostWrapper = ({Post, goNext}) => {
               style={{
                 color: color.white,
                 fontFamily: Font.SemiBold,
-                fontSize: width * 0.036,
+                fontSize: width * 0.04,
                 letterSpacing: 0.2,
               }}>
               {Post?.user2?.username}
@@ -442,7 +440,7 @@ const PostWrapper = ({Post, goNext}) => {
                 style={{
                   fontFamily: Font.Regular,
                   fontSize: width * 0.035,
-                  letterSpacing: 0.3,
+                  // letterSpacing: 0.3,
                   color: color.white,
                 }}>
                 Streak:{' '}
@@ -452,7 +450,7 @@ const PostWrapper = ({Post, goNext}) => {
                   color: color.white,
                   fontSize: width * 0.035,
                   fontFamily: Font.Medium,
-                  letterSpacing: 0.3,
+                  // letterSpacing: 0.3,
                 }}>
                 {postStreak.user2}
               </Text>
@@ -477,7 +475,7 @@ const PostWrapper = ({Post, goNext}) => {
                 style={{
                   fontFamily: Font.Regular,
                   fontSize: width * 0.035,
-                  letterSpacing: 0.3,
+                  // letterSpacing: 0.3,
                   color: color.white,
                 }}>
                 Votes:{' '}
@@ -495,6 +493,7 @@ const PostWrapper = ({Post, goNext}) => {
           </View>
           {/* vote button */}
           <TouchableOpacity
+            disabled={isVoting}
             onPress={() => !voteIndi.user2 && handleVote('user2')}
             style={{
               flexDirection: 'row',
@@ -513,9 +512,9 @@ const PostWrapper = ({Post, goNext}) => {
                 textAlign: 'center',
                 fontFamily: Font.SemiBold,
                 fontSize: width * 0.032,
-                letterSpacing: 0.3,
+                // letterSpacing: 0.3,
               }}>
-              {voteIndi.user2 ? 'voted' : 'vote'}
+              {voteIndi.user2 ? 'Voted' : 'Vote'}
             </Text>
           </TouchableOpacity>
         </View>

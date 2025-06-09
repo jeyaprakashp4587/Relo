@@ -91,7 +91,9 @@ const Post = () => {
     }
   }, [image, user]);
   return (
-    <ScrollView style={{backgroundColor: color.black, flex: 1}}>
+    <ScrollView
+      style={{backgroundColor: color.black, flex: 1}}
+      showsVerticalScrollIndicator={false}>
       <ImageBackground
         source={{
           uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',

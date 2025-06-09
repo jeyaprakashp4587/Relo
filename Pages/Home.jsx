@@ -1,19 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  Dimensions,
-  Text,
-  View,
-  TouchableOpacity,
-  ToastAndroid,
-  ImageBackground,
-} from 'react-native';
+import {Dimensions, View, TouchableOpacity, ToastAndroid} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import Carousel from 'react-native-reanimated-carousel';
 import axios from 'axios';
 
 import {color} from '../Const/Color';
-import {Font} from '../Const/Font';
 import {useData} from '../Context/Contexter';
 import PostWrapper from '../Components/PostWrapper';
 import {Api} from '../Api/Api';
@@ -24,51 +16,90 @@ const Home = () => {
   const {width, height} = Dimensions.get('window');
   const navigation = useNavigation();
   const {user} = useData();
+
   const carouselRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const isScrollingRef = useRef(false);
+  const isFetchingMore = useRef(false);
+  const fetchCooldownRef = useRef(false);
+  const currentIndexRef = useRef(0);
+
   const [randomPost, setRandomPost] = useState([]);
   const [loading, setLoading] = useState(false);
-  // Get random posts
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Fetch random posts
   const getRandom = useCallback(async () => {
+    if (isFetchingMore.current) {
+      return;
+    }
+    isFetchingMore.current = true;
     try {
-      setLoading(true);
       const {data, status} = await axios.get(`${Api}/Post/getRandomPair`);
       if (status === 200 && Array.isArray(data?.post)) {
-        setRandomPost(prev => [...prev, ...data.post]);
+        setRandomPost(prev => {
+          const newPosts = data.post.filter(
+            newItem => !prev.some(old => old._id === newItem._id),
+          );
+          return [...prev, ...newPosts];
+        });
+      } else {
+        console.log('No posts or invalid response');
       }
     } catch (error) {
       ToastAndroid.show('Error fetching posts', ToastAndroid.SHORT);
+      console.error('Fetch error:', error);
     } finally {
-      setLoading(false);
+      isFetchingMore.current = false;
     }
   }, []);
+
   useEffect(() => {
     getRandom();
   }, [getRandom]);
-  // Triggered when snapping to a new item
-  const handleTrigger = index => {
-    setCurrentIndex(index);
-    if (index >= randomPost.length - 2) {
-      getRandom(); // Load more posts when near end
-    }
-  };
-  // Go to next item
+
   const goToNext = useCallback(() => {
-    if (carouselRef.current) {
-      const nextIndex = (currentIndex + 1) % randomPost.length;
-      carouselRef.current.scrollTo({index: nextIndex, animated: true});
+    if (!carouselRef.current) return;
+    if (isScrollingRef.current) return;
+
+    const nextIndex = currentIndexRef.current + 1;
+    if (nextIndex >= randomPost.length) {
+      if (!isFetchingMore.current) getRandom();
+      return;
     }
-  }, [currentIndex, randomPost.length]);
-  // Render item
+
+    isScrollingRef.current = true;
+    carouselRef.current.scrollTo({index: nextIndex, animated: true});
+  }, [randomPost.length, getRandom]);
+
+  // Called when the carousel snaps to a new item
+  const onSnapToItem = useCallback(
+    index => {
+      currentIndexRef.current = index;
+      setCurrentIndex(index);
+      isScrollingRef.current = false;
+
+      if (
+        index >= randomPost.length - 1 &&
+        !isFetchingMore.current &&
+        !fetchCooldownRef.current
+      ) {
+        fetchCooldownRef.current = true;
+        getRandom();
+        setTimeout(() => {
+          fetchCooldownRef.current = false;
+        }, 1500);
+      }
+    },
+    [randomPost.length, getRandom],
+  );
+
   const renderItem = useCallback(
     ({item}) => <PostWrapper Post={item} goNext={goToNext} />,
     [goToNext],
   );
+
   return (
-    <ImageBackground
-      source={{
-        uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
-      }}
+    <View
       style={{
         flex: 1,
         backgroundColor: color.black,
@@ -81,7 +112,6 @@ const Home = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           paddingVertical: 10,
-          borderColor: 'red',
           alignItems: 'center',
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
@@ -94,7 +124,7 @@ const Home = () => {
               width: width * 0.17,
               aspectRatio: 1,
               borderRadius: 50,
-              borderWidth: 3,
+              borderWidth: 1,
               borderColor: 'white',
             }}
           />
@@ -102,7 +132,7 @@ const Home = () => {
         <TouchableOpacity
           style={{
             borderWidth: 1,
-            borderColor: color.white,
+            borderColor: 'rgba(240, 240, 240, 0.33)',
             width: 30,
             aspectRatio: 1,
             padding: 20,
@@ -116,28 +146,11 @@ const Home = () => {
               priority: FastImage.priority.high,
             }}
             resizeMode="contain"
-            style={{
-              width: 30,
-              aspectRatio: 1,
-            }}
+            style={{width: 24, aspectRatio: 1}}
           />
         </TouchableOpacity>
       </View>
-      {/* Banner Ad */}
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderColor: 'red',
-        }}>
-        <BannerAd
-          unitId={
-            __DEV__ ? TestIds.BANNER : 'ca-app-pub-3257747925516984/6972244634'
-          }
-          size={BannerAdSize.BANNER}
-          requestOptions={{requestNonPersonalizedAdsOnly: true}}
-        />
-      </View>
+
       {/* Carousel or Skeleton */}
       {!loading ? (
         <Carousel
@@ -146,9 +159,10 @@ const Home = () => {
           height={height * 0.7}
           data={randomPost}
           renderItem={renderItem}
-          scrollAnimationDuration={1000}
-          onSnapToItem={handleTrigger}
-          mode={'horizontal-stack'}
+          scrollAnimationDuration={4000}
+          onSnapToItem={onSnapToItem}
+          mode="horizontal-stack"
+          // Remove enabled prop so scrolling isn’t blocked
         />
       ) : (
         <View
@@ -170,7 +184,19 @@ const Home = () => {
           ))}
         </View>
       )}
-    </ImageBackground>
+
+      {/* Banner Ad */}
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <BannerAd
+          unitId={
+            __DEV__ ? TestIds.BANNER : 'ca-app-pub-3257747925516984/6972244634'
+          }
+          size={BannerAdSize.BANNER}
+          requestOptions={{requestNonPersonalizedAdsOnly: true}}
+        />
+      </View>
+    </View>
   );
 };
+
 export default Home;
