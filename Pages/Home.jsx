@@ -117,7 +117,6 @@ const Home = () => {
         style={{
           borderColor: 'red',
           columnGap: 10,
-
           padding: 15,
           flexDirection: 'row',
           alignItems: 'center',
@@ -146,6 +145,7 @@ const Home = () => {
             columnGap: 15,
           }}>
           <TouchableOpacity
+            onPress={() => navigation.navigate('leaderBoard')}
             style={{
               justifyContent: 'center',
               flexDirection: 'column',

@@ -11,6 +11,7 @@ import SignIn from '../LoginSystem/SignIn';
 import Splash from '../LoginSystem/Splash';
 import SignupScreen from '../LoginSystem/SignUpScreen';
 import GoBackArrow from '../Components/GoBackArrow';
+import LeaderBoard from '../Pages/LeaderBoard';
 const {width, height} = Dimensions.get('window');
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
@@ -119,6 +120,11 @@ const StackNavigation = () => {
       <Stack.Screen
         name="goBack"
         component={GoBackArrow}
+        options={{animation: 'slide_from_right'}}
+      />
+      <Stack.Screen
+        name="leaderBoard"
+        component={LeaderBoard}
         options={{animation: 'slide_from_right'}}
       />
     </Stack.Navigator>

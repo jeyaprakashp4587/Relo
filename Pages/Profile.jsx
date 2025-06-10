@@ -67,7 +67,7 @@ const Profile = () => {
                 fontFamily: Font.Regular,
                 fontSize: width * 0.04,
               }}>
-              uploads:
+              Posts:
             </Text>
             <Text
               style={{
@@ -112,7 +112,7 @@ const Profile = () => {
               fontSize: width * 0.055,
               paddingBottom: 10,
             }}>
-            uploads
+            Posts
           </Text>
           <View
             style={{
