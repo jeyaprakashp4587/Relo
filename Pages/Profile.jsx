@@ -13,6 +13,7 @@ import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import Skeleton from '../skeleton/Skeleton';
 import {useData} from '../Context/Contexter';
+import GoBackArrow from '../Components/GoBackArrow';
 
 const Profile = () => {
   const {width, height} = Dimensions.get('window');
@@ -25,15 +26,7 @@ const Profile = () => {
         uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
       }}
       style={{flex: 1}}>
-      <Text
-        style={{
-          paddingHorizontal: 15,
-          color: color.white,
-          fontSize: width * 0.1,
-          fontFamily: Font.SemiBold,
-        }}>
-        Profile
-      </Text>
+      <GoBackArrow text={'Profile'} />
       {/* profile */}
       <View
         style={{

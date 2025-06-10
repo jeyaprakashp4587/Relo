@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   ToastAndroid,
   TouchableOpacity,
   View,
@@ -17,6 +18,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import {Api} from '../Api/Api';
 import {useData} from '../Context/Contexter';
+import GoBackArrow from '../Components/GoBackArrow';
 
 const Post = () => {
   const {width, height} = Dimensions.get('window');
@@ -25,6 +27,7 @@ const Post = () => {
   const [image, setImage] = useState();
   const [isShowPostButton, setIsShowPostButton] = useState(false);
   const [loadImage, setLoadImage] = useState(false);
+  const [message, setMessage] = useState('');
   const selectImage = useCallback(async () => {
     const result = await launchImageLibrary({
       selectionLimit: 1,
@@ -75,6 +78,7 @@ const Post = () => {
       const {status, data} = await axios.post(`${Api}/Post/uploadPost`, {
         userId: user?._id,
         Image: image,
+        Message: message,
       });
       if (status === 200) {
         ToastAndroid.show('upload successfully', ToastAndroid.SHORT);
@@ -99,16 +103,15 @@ const Post = () => {
           uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
         }}
         style={{flex: 1, height: height * 1, paddingHorizontal: 15}}>
+        <GoBackArrow text="Post" />
         <Text
           style={{
             color: color.white,
-            fontSize: width * 0.1,
-            width: '70%',
+            fontSize: width * 0.07,
             fontFamily: Font.SemiBold,
-            marginBottom: 20,
-            letterSpacing: 0.3,
+            marginBottom: 10,
           }}>
-          Upload your photo
+          Upload your post
         </Text>
         {/* show selected image */}
         {loadImage && (
@@ -155,8 +158,10 @@ const Post = () => {
             onPress={selectImage}
             style={{
               backgroundColor: color.blue,
-              padding: 15,
               borderRadius: 50,
+              height: height * 0.068,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
             <Text
               style={{
@@ -175,8 +180,11 @@ const Post = () => {
             onPress={uploadPost}
             style={{
               backgroundColor: color.blue,
-              padding: 15,
+              // padding: 15,
               borderRadius: 50,
+              height: height * 0.068,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
             {uploadIndi ? (
               <ActivityIndicator size={29} />
@@ -192,6 +200,38 @@ const Post = () => {
               </Text>
             )}
           </TouchableOpacity>
+        )}
+        {isShowPostButton && (
+          <View
+            style={{
+              backgroundColor: 'rgba(98, 100, 102, 0.33)',
+              padding: 15,
+              marginTop: 15,
+              borderRadius: 5,
+              rowGap: 10,
+            }}>
+            <Text
+              style={{
+                fontSize: width * 0.06,
+                fontFamily: Font.Medium,
+                color: color.white,
+                lineHeight: 35,
+              }}>
+              What is your {'\n'}thanks message?
+            </Text>
+            <TextInput
+              placeholder="Ex: Thanks for voting me"
+              placeholderTextColor={color.white}
+              maxLength={30}
+              style={{
+                borderWidth: 0.4,
+                borderColor: 'rgba(156, 156, 156, 0.6))',
+                borderRadius: 30,
+                paddingHorizontal: 15,
+                fontSize: width * 0.032,
+              }}
+            />
+          </View>
         )}
       </ImageBackground>
     </ScrollView>

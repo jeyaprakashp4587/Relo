@@ -4,13 +4,15 @@ import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import Carousel from 'react-native-reanimated-carousel';
 import axios from 'axios';
-
 import {color} from '../Const/Color';
 import {useData} from '../Context/Contexter';
 import PostWrapper from '../Components/PostWrapper';
 import {Api} from '../Api/Api';
 import Skeleton from '../skeleton/Skeleton';
 import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
+import useFCMToken from '../Hooks/useFCMToken';
+import {Text} from 'react-native-gesture-handler';
+import {Font} from '../Const/Font';
 
 const Home = () => {
   const {width, height} = Dimensions.get('window');
@@ -26,7 +28,7 @@ const Home = () => {
   const [randomPost, setRandomPost] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  useFCMToken();
   // Fetch random posts
   const getRandom = useCallback(async () => {
     if (isFetchingMore.current) {
@@ -150,13 +152,70 @@ const Home = () => {
           />
         </TouchableOpacity>
       </View>
-
+      {/* options */}
+      <View
+        style={{
+          // borderWidth: 1,
+          borderColor: 'red',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'row',
+          columnGap: 10,
+        }}>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          {' '}
+          <FastImage
+            source={{
+              uri: 'https://i.ibb.co/23R7dDMB/podium.png',
+              priority: FastImage.priority.high,
+            }}
+            resizeMode="contain"
+            style={{width: width * 0.1, aspectRatio: 1}}
+          />
+          <Text
+            style={{
+              color: color.white,
+              textAlign: 'center',
+              fontFamily: Font.Medium,
+            }}>
+            LeaderBoard
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <FastImage
+            source={{
+              uri: 'https://i.ibb.co/B5bBhYb7/coin.png',
+              priority: FastImage.priority.high,
+            }}
+            resizeMode="contain"
+            style={{width: width * 0.1, aspectRatio: 1}}
+          />
+          <Text
+            style={{
+              color: color.white,
+              textAlign: 'center',
+              fontFamily: Font.Medium,
+            }}>
+            Coins: {user?.coins ?? 0}
+          </Text>
+        </TouchableOpacity>
+      </View>
       {/* Carousel or Skeleton */}
       {!loading ? (
         <Carousel
           ref={carouselRef}
           width={width}
-          height={height * 0.7}
+          height={height * 0.6}
           data={randomPost}
           renderItem={renderItem}
           scrollAnimationDuration={4000}

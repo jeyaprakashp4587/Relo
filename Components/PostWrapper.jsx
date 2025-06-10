@@ -1,6 +1,7 @@
+// Updated PostWrapper.js with centralized StyleSheet
 import {
   Dimensions,
-  Image,
+  ImageBackground,
   Modal,
   StyleSheet,
   Text,
@@ -15,16 +16,14 @@ import {Font} from '../Const/Font';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import {Api} from '../Api/Api';
+import FadeView from './FadeView';
+
+const {width, height} = Dimensions.get('window');
 
 const PostWrapper = ({Post, goNext}) => {
-  const {width, height} = Dimensions.get('window');
   const [isShowModel, setIsShowModel] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
-  const [voteIndi, setVoteIndi] = useState({
-    user1: false,
-    user2: false,
-  });
-  // set the post values in state
+  const [voteIndi, setVoteIndi] = useState({user1: false, user2: false});
   const [postVote, setPostVote] = useState({
     user1: Post?.user1?.Post?.PostVote || 0,
     user2: Post?.user2?.Post?.PostVote || 0,
@@ -33,54 +32,72 @@ const PostWrapper = ({Post, goNext}) => {
     user1: Post?.user1?.Post?.PostStreak || 0,
     user2: Post?.user2?.Post?.PostStreak || 0,
   });
+  const [showFade, setShowFade] = useState({user1: false, user2: false});
   const [isVoting, setIsVoting] = useState(false);
+  const [dominator, setDominator] = useState('Tied');
+
+  const handleClick = userKey => {
+    setShowFade(prev => ({...prev, [userKey]: false}));
+    setTimeout(() => {
+      setShowFade(prev => ({...prev, [userKey]: true}));
+    }, 10);
+  };
+
   const handleVote = useCallback(
     async user => {
       if (isVoting) return;
       setIsVoting(true);
-
       try {
-        const {data, status} = await axios.post(`${Api}/Post/vote`, {
+        const {status} = await axios.post(`${Api}/Post/vote`, {
           winner: user === 'user1' ? Post?.user1?._id : Post?.user2?._id,
           losser: user === 'user1' ? Post?.user2?._id : Post?.user1?._id,
           winnerPost:
             user === 'user1' ? Post?.user1?.Post?._id : Post?.user2?.Post?._id,
           losserPost:
             user === 'user1' ? Post?.user2?.Post?._id : Post?.user1?.Post?._id,
-          voter: user?._id,
+          voter: Post?.voterId,
         });
 
         if (status === 200) {
           if (user === 'user1') {
-            setPostVote(prev => ({...prev, user1: (prev.user1 || 0) + 1}));
-            setPostStreak(prev => ({
+            setPostVote(prev => ({
               ...prev,
-              user1: (prev.user1 || 0) + 1,
-              user2: 0,
+              user1: prev.user1 + 1,
+              user2: prev.user2 - 1,
             }));
-            setPostVote(prev => ({...prev, user2: (prev.user2 || 0) - 1}));
+            setPostStreak(prev => ({...prev, user1: prev.user1 + 1, user2: 0}));
             setVoteIndi({user1: true, user2: false});
           } else {
-            setPostVote(prev => ({...prev, user2: (prev.user2 || 0) + 1}));
-            setPostStreak(prev => ({
+            setPostVote(prev => ({
               ...prev,
-              user2: (prev.user2 || 0) + 1,
-              user1: 0,
+              user2: prev.user2 + 1,
+              user1: prev.user1 - 1,
             }));
-            setPostVote(prev => ({...prev, user1: (prev.user1 || 0) - 1}));
+            setPostStreak(prev => ({...prev, user2: prev.user2 + 1, user1: 0}));
             setVoteIndi({user1: false, user2: true});
           }
-          goNext();
+          handleClick(user);
         }
       } catch (error) {
         ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
-        console.error(error);
       } finally {
         setIsVoting(false);
       }
     },
-    [Post, goNext, isVoting],
+    [Post, isVoting],
   );
+
+  useEffect(() => {
+    const user1Votes = postVote.user1 ?? 0;
+    const user2Votes = postVote.user2 ?? 0;
+    setDominator(
+      user1Votes > user2Votes
+        ? Post?.user1?.username
+        : user2Votes > user1Votes
+        ? Post?.user2?.username
+        : 'Tied',
+    );
+  }, [postVote]);
 
   useEffect(() => {
     setPostVote({
@@ -92,483 +109,234 @@ const PostWrapper = ({Post, goNext}) => {
       user2: Post?.user2?.Post?.PostStreak || 0,
     });
   }, [Post]);
-  return (
-    <View
-      style={{
-        width: width,
-        alignSelf: 'center',
-        height: height * 0.7,
-        backgroundColor: color.black,
-        // borderWidth: 1,
-      }}>
-      {/* first user */}
-      <View
-        style={{
-          // borderWidth: 1,
-          borderColor: 'red',
-          flexDirection: 'row',
-          flex: 1,
-        }}>
-        <View style={{borderWidth: 0, borderColor: 'red', width: '60%'}}>
-          <TouchableOpacity
-            onPress={() => {
-              setIsShowModel(true);
-              setSelectedImage(Post?.user1?.Post?.PostImage);
-            }}>
-            <FastImage
-              source={{
-                uri: Post?.user1?.Post?.PostImage,
-                priority: FastImage.priority.high,
-              }}
-              resizeMode="cover"
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-            />
-            {/* large view  */}
-            <TouchableOpacity
-              onPress={() => {
-                setIsShowModel(true);
-                setSelectedImage(Post?.user1?.Post?.PostImage);
-              }}
-              style={{
-                position: 'absolute',
-                borderWidth: 1,
-                borderColor: color.black,
-                // padding: 2,
-                borderRadius: 100,
-                width: '60%',
-                alignSelf: 'center',
-                bottom: 10,
-                height: height * 0.04,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text
-                style={{
-                  color: color.black,
-                  textAlign: 'center',
-                  fontFamily: Font.Medium,
-                  fontSize: width * 0.035,
-                }}>
-                view
-              </Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            borderColor: 'red',
-            flex: 1,
-            padding: 15,
-            flexDirection: 'column',
-            justifyContent: 'space-around',
-            rowGap: 5,
-            backgroundColor: color.black,
-            alignItems: 'center',
-          }}>
-          {/* profile info */}
-          <View
-            style={{
-              flexDirection: 'column',
-              alignItems: 'center',
-              rowGap: 5,
-              padding: 10,
-              borderRadius: 10,
-              justifyContent: 'flex-start',
-            }}>
-            <FastImage
-              source={{
-                uri: Post?.user1?.profileImage,
-                priority: FastImage.priority.high,
-              }}
-              style={{
-                width: 50,
-                aspectRatio: 1,
-                borderRadius: 50,
-              }}
-            />
-            <Text
-              style={{
-                color: color.white,
-                fontFamily: Font.SemiBold,
-                fontSize: width * 0.04,
-                letterSpacing: 0.2,
-              }}>
-              {Post?.user1?.username}
-            </Text>
-          </View>
-          {/* image info */}
-          <View
-            style={{
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-              }}>
-              <Text
-                style={{
-                  fontFamily: Font.Regular,
-                  fontSize: width * 0.035,
 
-                  color: color.white,
-                }}>
-                Streak:{' '}
-              </Text>
-              <Text
-                style={{
-                  color: color.white,
-                  fontSize: width * 0.035,
-                  fontFamily: Font.Medium,
-                }}>
-                {postStreak.user1}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-              }}>
-              <Text
-                style={{
-                  fontFamily: Font.Regular,
-                  fontSize: width * 0.035,
-                  // letterSpacing: 0.3,
-                  color: color.white,
-                }}>
-                Votes:{' '}
-              </Text>
-              <Text
-                style={{
-                  color: color.white,
-                  fontSize: width * 0.035,
-                  fontFamily: Font.Medium,
-                }}>
-                {postVote.user1}
-              </Text>
-            </View>
-          </View>
-          {/* vote button */}
-          <TouchableOpacity
-            disabled={isVoting}
-            onPress={() => !voteIndi.user1 && handleVote('user1')}
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              rowGap: 5,
-              backgroundColor: voteIndi.user1 ? color.white : color.Bg,
-              borderRadius: 50,
-              height: height * 0.044,
-              borderColor: 'rgb(255, 255, 255)',
-              width: '100%',
-            }}>
-            <Text
-              style={{
-                color: voteIndi.user1 ? color.black : color.white,
-                textAlign: 'center',
-                fontFamily: Font.SemiBold,
-                fontSize: width * 0.032,
-                // letterSpacing: 0.3,
-              }}>
-              {voteIndi.user1 ? 'Voted' : 'Vote'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* show dominator */}
-      <LinearGradient
-        colors={[
-          Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostVote
-            ? 'rgb(235, 109, 109)'
-            : 'rgba(33, 72, 95, 0.64)',
-          'rgba(0, 0, 0, 0.09)',
-        ]}
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'center',
-          columnGap: 5,
-        }}
-        start={{x: 0, y: 1}}
-        end={{x: 1, y: 0}}>
-        {Post?.user1.Post?.PostVote == Post?.user2?.Post?.PostVote ? (
-          <Text
-            style={{
-              color: color.white,
-              fontFamily: Font.SemiBold,
-              letterSpacing: 0.4,
-              textAlign: 'center',
-              width: '100%',
-            }}>
-            Tied
-          </Text>
-        ) : (
-          <Text
-            style={{
-              color: color.white,
-              fontFamily: Font.SemiBold,
-              letterSpacing: 0.4,
-              textAlign: 'center',
-              width: '100%',
-            }}>
-            Dominator:{' '}
-            {Post?.user1.Post?.PostVote > Post?.user2?.Post?.PostVote
-              ? Post?.user1.username
-              : Post?.user2?.username}
-          </Text>
-        )}
-      </LinearGradient>
-      {/* second user */}
-      <View
-        style={{
-          flexDirection: 'row-reverse',
-          flex: 1,
-        }}>
-        <View style={{borderWidth: 0, borderColor: 'red', width: '60%'}}>
+  const renderUserSection = (userKey, isReversed = false) => {
+    const user = Post?.[userKey];
+    const isVoted = voteIndi[userKey];
+    return (
+      <View style={[styles.userRow, isReversed && styles.userRowReversed]}>
+        <View style={styles.imageWrapper}>
           <TouchableOpacity
             onPress={() => {
               setIsShowModel(true);
-              setSelectedImage(Post?.user2?.Post?.PostImage);
+              setSelectedImage(user?.Post?.PostImage);
             }}>
             <FastImage
-              source={{
-                uri: Post?.user2?.Post?.PostImage,
-                priority: FastImage.priority.high,
-              }}
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
+              source={{uri: user?.Post?.PostImage}}
+              style={styles.mainImage}
+              resizeMode="cover"
             />
-            {/* large view  */}
             <TouchableOpacity
+              style={styles.viewBtn}
               onPress={() => {
                 setIsShowModel(true);
-                setSelectedImage(Post?.user2?.Post?.PostImage);
-              }}
-              style={{
-                position: 'absolute',
-                borderWidth: 1,
-                borderColor: color.black,
-                padding: 2,
-                borderRadius: 100,
-                width: '60%',
-                alignSelf: 'center',
-                bottom: 10,
-                height: height * 0.04,
-                alignItems: 'center',
-                justifyContent: 'center',
+                setSelectedImage(user?.Post?.PostImage);
               }}>
-              <Text
-                style={{
-                  color: color.black,
-                  textAlign: 'center',
-                  fontFamily: Font.Medium,
-                  fontSize: width * 0.035,
-                }}>
-                view
-              </Text>
+              <Text style={styles.viewBtnText}>View</Text>
             </TouchableOpacity>
+            <View style={styles.fadeViewWrapper}>
+              {user?.Post?.PostMessage && (
+                <FadeView
+                  trigger={showFade[userKey]}
+                  text={user?.Post?.PostMessage}
+                />
+              )}
+            </View>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            // borderWidth: 2,
-            borderColor: 'red',
-            padding: 15,
-            flexDirection: 'column',
-            justifyContent: 'space-around',
-            rowGap: 5,
-            backgroundColor: color.black,
-            alignItems: 'center',
-            flex: 1,
-          }}>
-          {/* profile info */}
-          <View
-            style={{
-              flexDirection: 'column',
-              alignItems: 'center',
-              padding: 10,
-              borderRadius: 10,
-              justifyContent: 'center',
-              borderColor: 'red',
-              rowGap: 5,
-            }}>
+        <View style={styles.infoBox}>
+          <View style={styles.profileBox}>
             <FastImage
-              source={{
-                uri: Post?.user2?.profileImage,
-                priority: FastImage.priority.high,
-              }}
-              // resizeMode="contain"
-              style={{width: 50, aspectRatio: 1, borderRadius: 50}}
+              source={{uri: user?.profileImage}}
+              style={styles.profileImage}
             />
-            <Text
-              style={{
-                color: color.white,
-                fontFamily: Font.SemiBold,
-                fontSize: width * 0.04,
-                letterSpacing: 0.2,
-              }}>
-              {Post?.user2?.username}
+            <Text style={styles.username}>{user?.username}</Text>
+          </View>
+          <View style={styles.voteInfoBox}>
+            <Text style={styles.labelText}>
+              Streak:{' '}
+              <Text style={styles.valueText}>{postStreak[userKey]}</Text>
+            </Text>
+            <Text style={styles.labelText}>
+              Votes: <Text style={styles.valueText}>{postVote[userKey]}</Text>
             </Text>
           </View>
-          {/* image info */}
-          <View
-            style={{
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-              }}>
-              <Text
-                style={{
-                  fontFamily: Font.Regular,
-                  fontSize: width * 0.035,
-                  // letterSpacing: 0.3,
-                  color: color.white,
-                }}>
-                Streak:{' '}
-              </Text>
-              <Text
-                style={{
-                  color: color.white,
-                  fontSize: width * 0.035,
-                  fontFamily: Font.Medium,
-                  // letterSpacing: 0.3,
-                }}>
-                {postStreak.user2}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-              }}>
-              {/* <Image
-                source={{uri: 'https://i.ibb.co/B5kH5kfv/increase.png'}}
-                // resizeMode="contain"
-                style={{
-                  width: 15,
-                  aspectRatio: 1,
-                  tintColor: 'rgba(255, 255, 255, 0.47)',
-                }}
-              /> */}
-              <Text
-                style={{
-                  fontFamily: Font.Regular,
-                  fontSize: width * 0.035,
-                  // letterSpacing: 0.3,
-                  color: color.white,
-                }}>
-                Votes:{' '}
-              </Text>
-              <Text
-                style={{
-                  color: color.white,
-                  fontSize: width * 0.035,
-                  fontFamily: Font.Medium,
-                  letterSpacing: 0.3,
-                }}>
-                {postVote.user2}
-              </Text>
-            </View>
-          </View>
-          {/* vote button */}
           <TouchableOpacity
             disabled={isVoting}
-            onPress={() => !voteIndi.user2 && handleVote('user2')}
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              columnGap: 5,
-              backgroundColor: voteIndi.user2 ? color.white : color.Bg,
-              borderRadius: 50,
-              borderColor: 'rgb(255, 255, 255)',
-              height: height * 0.044,
-              width: '100%',
-            }}>
-            <Text
-              style={{
-                color: voteIndi.user2 ? color.black : color.white,
-                textAlign: 'center',
-                fontFamily: Font.SemiBold,
-                fontSize: width * 0.032,
-                // letterSpacing: 0.3,
-              }}>
-              {voteIndi.user2 ? 'Voted' : 'Vote'}
+            onPress={() => !isVoted && handleVote(userKey)}
+            style={[styles.voteBtn, isVoted && styles.votedBtn]}>
+            <Text style={[styles.voteBtnText, isVoted && styles.votedBtnText]}>
+              {isVoted ? 'Voted' : 'Vote'}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-      {/* model for sho user clicked image for larger view */}
-      <Modal transparent={true} visible={isShowModel} animationType="fade">
-        <View
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.89)',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            rowGap: 20,
-          }}>
+    );
+  };
+
+  return (
+    <ImageBackground
+      source={{
+        uri: 'https://i.ibb.co/RT9Vsycp/Chat-GPT-Image-Jun-4-2025-10-38-10-PM.png',
+      }}
+      style={{flex: 1, height: height * 0.6, width: width}}>
+      {renderUserSection('user1')}
+      <View style={styles.dominatorBar}>
+        <Text style={styles.dominatorText}>
+          {dominator === 'Tied' ? 'Tied' : `Dominator: ${dominator}`}
+        </Text>
+      </View>
+      {renderUserSection('user2', true)}
+      <Modal transparent visible={isShowModel} animationType="fade">
+        <View style={styles.modalView}>
           <FastImage
-            source={{
-              uri: selectedImage,
-              priority: FastImage.priority.high,
-            }}
+            source={{uri: selectedImage}}
+            style={styles.modalImage}
             resizeMode="contain"
-            style={{
-              width: width * 0.9,
-              aspectRatio: 1,
-            }}
           />
           <TouchableOpacity
-            onPress={() => setIsShowModel(false)}
-            style={{
-              padding: 15,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              columnGap: 5,
-              backgroundColor: color.blue,
-              borderRadius: 50,
-              width: '90%',
-            }}>
-            <Text
-              style={{
-                color: color.white,
-                textAlign: 'center',
-                fontFamily: Font.SemiBold,
-                fontSize: width * 0.035,
-                letterSpacing: 0.3,
-              }}>
-              close
-            </Text>
+            style={styles.modalCloseBtn}
+            onPress={() => setIsShowModel(false)}>
+            <Text style={styles.modalCloseText}>Close</Text>
           </TouchableOpacity>
         </View>
       </Modal>
-    </View>
+    </ImageBackground>
   );
 };
 
 export default PostWrapper;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  userRow: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+  userRowReversed: {
+    flexDirection: 'row-reverse',
+  },
+  imageWrapper: {
+    width: '60%',
+  },
+  mainImage: {
+    width: '100%',
+    height: '100%',
+  },
+  viewBtn: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    width: '50%',
+    height: height * 0.04,
+    backgroundColor: 'rgba(8, 8, 8, 0.43)',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewBtnText: {
+    color: color.white,
+    fontFamily: Font.Regular,
+    fontSize: width * 0.035,
+  },
+  fadeViewWrapper: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoBox: {
+    flex: 1,
+    backgroundColor: 'rgba(98, 99, 100, 0.33)',
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    rowGap: 5,
+  },
+  profileBox: {
+    alignItems: 'center',
+    borderRadius: 10,
+    rowGap: 5,
+  },
+  profileImage: {
+    width: width * 0.17,
+    aspectRatio: 1,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: 'white',
+  },
+  username: {
+    color: color.white,
+    fontFamily: Font.SemiBold,
+    fontSize: width * 0.04,
+  },
+  voteInfoBox: {
+    alignItems: 'center',
+    width: '100%',
+    rowGap: 1,
+  },
+  labelText: {
+    color: color.white,
+    fontFamily: Font.Regular,
+    fontSize: width * 0.035,
+  },
+  valueText: {
+    fontFamily: Font.Medium,
+  },
+  voteBtn: {
+    borderRadius: 5,
+    backgroundColor: 'rgba(118, 116, 121, 0.21)',
+    height: height * 0.044,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  votedBtn: {
+    backgroundColor: color.white,
+  },
+  voteBtnText: {
+    color: color.white,
+    fontFamily: Font.SemiBold,
+    fontSize: width * 0.032,
+  },
+  votedBtnText: {
+    color: color.black,
+  },
+  dominatorBar: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dominatorText: {
+    color: color.white,
+    fontFamily: Font.SemiBold,
+    letterSpacing: 0.3,
+    textAlign: 'center',
+    width: '100%',
+    fontSize: width * 0.04,
+  },
+  modalView: {
+    backgroundColor: 'rgba(0, 0, 0, 0.89)',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    rowGap: 20,
+  },
+  modalImage: {
+    width: width * 0.9,
+    aspectRatio: 1,
+  },
+  modalCloseBtn: {
+    padding: 15,
+    backgroundColor: color.blue,
+    borderRadius: 50,
+    width: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalCloseText: {
+    color: color.white,
+    fontFamily: Font.SemiBold,
+    fontSize: width * 0.035,
+  },
+});

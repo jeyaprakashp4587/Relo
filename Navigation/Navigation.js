@@ -7,10 +7,10 @@ import {Dimensions, Image, View, Platform} from 'react-native';
 import {color} from '../Const/Color';
 import Profile from '../Pages/Profile';
 import Post from '../Pages/Post';
-import {Font} from '../Const/Font';
 import SignIn from '../LoginSystem/SignIn';
 import Splash from '../LoginSystem/Splash';
 import SignupScreen from '../LoginSystem/SignUpScreen';
+import GoBackArrow from '../Components/GoBackArrow';
 const {width, height} = Dimensions.get('window');
 const TabNavigation = () => {
   const Tab = createBottomTabNavigator();
@@ -24,6 +24,7 @@ const TabNavigation = () => {
           borderTopWidth: 0,
           height: height * 0.085, // slightly more height
           paddingBottom: Platform.OS === 'android' ? 6 : 20,
+          // borderWidth: 2,
         },
         tabBarItemStyle: {
           justifyContent: 'center',
@@ -113,6 +114,11 @@ const StackNavigation = () => {
       <Stack.Screen
         name="SignUp"
         component={SignupScreen}
+        options={{animation: 'slide_from_right'}}
+      />
+      <Stack.Screen
+        name="goBack"
+        component={GoBackArrow}
         options={{animation: 'slide_from_right'}}
       />
     </Stack.Navigator>
