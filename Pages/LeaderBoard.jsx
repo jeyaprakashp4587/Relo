@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const NotificationPage = () => {
+const LeaderBoard = () => {
   return (
     <View>
-      <Text>NotificationPage</Text>
+      <Text>LeaderBoard</Text>
     </View>
   );
 };
 
-export default NotificationPage;
+export default LeaderBoard;
 
 const styles = StyleSheet.create({});

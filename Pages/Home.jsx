@@ -1,5 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Dimensions, View, TouchableOpacity, ToastAndroid} from 'react-native';
+import {
+  Dimensions,
+  View,
+  TouchableOpacity,
+  ToastAndroid,
+  ImageBackground,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import Carousel from 'react-native-reanimated-carousel';
@@ -107,14 +113,15 @@ const Home = () => {
         backgroundColor: color.black,
         justifyContent: 'space-between',
       }}>
-      {/* Header */}
       <View
         style={{
-          paddingHorizontal: 15,
+          borderColor: 'red',
+          columnGap: 10,
+
+          padding: 15,
           flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingVertical: 10,
           alignItems: 'center',
+          justifyContent: 'space-between',
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <FastImage
@@ -131,84 +138,62 @@ const Home = () => {
             }}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            borderWidth: 1,
-            borderColor: 'rgba(240, 240, 240, 0.33)',
-            width: 30,
-            aspectRatio: 1,
-            padding: 20,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 100,
-          }}>
-          <FastImage
-            source={{
-              uri: 'https://i.ibb.co/Zp7k47Pt/notification-bell.png',
-              priority: FastImage.priority.high,
-            }}
-            resizeMode="contain"
-            style={{width: 24, aspectRatio: 1}}
-          />
-        </TouchableOpacity>
-      </View>
-      {/* options */}
-      <View
-        style={{
-          // borderWidth: 1,
-          borderColor: 'red',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-          columnGap: 10,
-        }}>
-        <TouchableOpacity
+        <View
           style={{
             justifyContent: 'center',
-            flexDirection: 'column',
             alignItems: 'center',
+            flexDirection: 'row',
+            columnGap: 15,
           }}>
-          {' '}
-          <FastImage
-            source={{
-              uri: 'https://i.ibb.co/23R7dDMB/podium.png',
-              priority: FastImage.priority.high,
-            }}
-            resizeMode="contain"
-            style={{width: width * 0.1, aspectRatio: 1}}
-          />
-          <Text
+          <TouchableOpacity
             style={{
-              color: color.white,
-              textAlign: 'center',
-              fontFamily: Font.Medium,
+              justifyContent: 'center',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}>
-            LeaderBoard
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}>
-          <FastImage
-            source={{
-              uri: 'https://i.ibb.co/B5bBhYb7/coin.png',
-              priority: FastImage.priority.high,
-            }}
-            resizeMode="contain"
-            style={{width: width * 0.1, aspectRatio: 1}}
-          />
-          <Text
+            <FastImage
+              source={{
+                uri: 'https://i.ibb.co/23R7dDMB/podium.png',
+                priority: FastImage.priority.high,
+              }}
+              resizeMode="contain"
+              style={{width: width * 0.08, aspectRatio: 1}}
+            />
+            <Text
+              style={{
+                color: color.white,
+                textAlign: 'center',
+                fontFamily: Font.Medium,
+                fontSize: width * 0.03,
+              }}>
+              Leaderboard
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
-              color: color.white,
-              textAlign: 'center',
-              fontFamily: Font.Medium,
+              justifyContent: 'center',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}>
-            Coins: {user?.coins ?? 0}
-          </Text>
-        </TouchableOpacity>
+            <FastImage
+              source={{
+                uri: 'https://i.ibb.co/B5bBhYb7/coin.png',
+                priority: FastImage.priority.high,
+              }}
+              resizeMode="contain"
+              style={{width: width * 0.08, aspectRatio: 1}}
+            />
+            <Text
+              style={{
+                color: color.white,
+                textAlign: 'center',
+                fontFamily: Font.Medium,
+                fontSize: width * 0.03,
+              }}>
+              Coins: {user?.coins ?? 0}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       {/* Carousel or Skeleton */}
       {!loading ? (
@@ -221,7 +206,6 @@ const Home = () => {
           scrollAnimationDuration={4000}
           onSnapToItem={onSnapToItem}
           mode="horizontal-stack"
-          // Remove enabled prop so scrolling isn’t blocked
         />
       ) : (
         <View

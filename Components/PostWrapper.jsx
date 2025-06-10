@@ -119,7 +119,7 @@ const PostWrapper = ({Post, goNext}) => {
           <TouchableOpacity
             onPress={() => {
               setIsShowModel(true);
-              setSelectedImage(user?.Post?.PostImage);
+              setSelectedImage(user?.Post?.PostImagee);
             }}>
             <FastImage
               source={{uri: user?.Post?.PostImage}}
