@@ -60,7 +60,6 @@ const Home = () => {
       isFetchingMore.current = false;
     }
   }, []);
-
   useEffect(() => {
     getRandom();
   }, [getRandom]);

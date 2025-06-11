@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import GoBackArrow from '../Components/GoBackArrow';
 import {Api} from '../Api/Api';
 import axios from 'axios';
@@ -16,38 +16,37 @@ import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
 import {color} from '../Const/Color';
 import Skeleton from '../skeleton/Skeleton';
+import CountdownTimer from '../Components/CountdownTimer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 const {width, height} = Dimensions.get('window');
 const LeaderBoard = () => {
   const [top3, setTop3] = useState([]);
   const [others, setOthers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const res = await axios.get(`${Api}/Post/leaderboard?limit=10`);
+      if (res.data.success) {
+        const data = res.data.data;
+        const top3Users = data.slice(0, 3);
+        const otherUsers = data.slice(3);
+        console.log(data);
 
-  useEffect(() => {
-    const fetchLeaderboard = async () => {
-      try {
-        const res = await axios.get(`${Api}/Post/leaderboard?limit=10`);
-        if (res.data.success) {
-          const data = res.data.data;
-
-          // 🧠 Split data
-          const top3Users = data.slice(0, 3);
-          const otherUsers = data.slice(3);
-          console.log(data);
-
-          setTop3(top3Users);
-          setOthers(otherUsers);
-        } else {
-          setError('Failed to load leaderboard.');
-        }
-      } catch (err) {
-        console.error('Leaderboard fetch error:', err);
-        setError('Network/server error.');
-      } finally {
-        setLoading(false);
+        setTop3(top3Users);
+        setOthers(otherUsers);
+      } else {
+        setError('Failed to load leaderboard.');
       }
-    };
-
+    } catch (err) {
+      console.error('Leaderboard fetch error:', err);
+      setError('Network/server error.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  useEffect(() => {
     fetchLeaderboard();
   }, []);
   // show leaderboard details
@@ -123,6 +122,8 @@ const LeaderBoard = () => {
           />
         </TouchableOpacity>
       </View>
+      {/* show timer coundown */}
+      <CountdownTimer />
       {/* top leaders */}
       <View
         style={{
