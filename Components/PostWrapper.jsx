@@ -17,10 +17,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import {Api} from '../Api/Api';
 import FadeView from './FadeView';
+import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
 const PostWrapper = ({Post, goNext}) => {
+  const navigation = useNavigation();
   const [isShowModel, setIsShowModel] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
   const [voteIndi, setVoteIndi] = useState({user1: false, user2: false});
@@ -145,13 +147,17 @@ const PostWrapper = ({Post, goNext}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.infoBox}>
-          <View style={styles.profileBox}>
+          <TouchableOpacity
+            style={styles.profileBox}
+            onPress={() => {
+              navigation.navigate('userProfile', {user: user?._id});
+            }}>
             <FastImage
               source={{uri: user?.profileImage}}
               style={styles.profileImage}
             />
             <Text style={styles.username}>{user?.username}</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.voteInfoBox}>
             <Text style={styles.labelText}>
               Streak:{' '}
