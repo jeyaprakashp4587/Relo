@@ -150,7 +150,7 @@ const PostWrapper = ({Post, goNext}) => {
           <TouchableOpacity
             style={styles.profileBox}
             onPress={() => {
-              navigation.navigate('userProfile', {user: user?._id});
+              navigation.navigate('userProfile', {userId: user?._id});
             }}>
             <FastImage
               source={{uri: user?.profileImage}}

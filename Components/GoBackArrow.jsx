@@ -40,7 +40,7 @@ const GoBackArrow = ({text}) => {
       </TouchableOpacity>
       <Text
         style={{
-          fontSize: width * 0.05,
+          fontSize: width * 0.06,
           fontFamily: Font.SemiBold,
           color: color.white,
         }}>

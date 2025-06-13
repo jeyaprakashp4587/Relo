@@ -17,10 +17,11 @@ import {Font} from '../Const/Font';
 import {color} from '../Const/Color';
 import Skeleton from '../skeleton/Skeleton';
 import CountdownTimer from '../Components/CountdownTimer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import moment from 'moment';
+import {useNavigation} from '@react-navigation/native';
+
 const {width, height} = Dimensions.get('window');
 const LeaderBoard = () => {
+  const navigation = useNavigation();
   const [top3, setTop3] = useState([]);
   const [others, setOthers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -134,7 +135,10 @@ const LeaderBoard = () => {
           padding: 20,
         }}>
         {top3.map((item, index) => (
-          <View
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('userProfile', {userId: item?._id});
+            }}
             key={index}
             style={{
               flexDirection: 'column',
@@ -204,7 +208,7 @@ const LeaderBoard = () => {
                 {index === 0 ? 500 : index === 1 ? 300 : 200}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
       {/* balance */}
@@ -238,6 +242,9 @@ const LeaderBoard = () => {
           keyExtractor={item => item?._id}
           renderItem={({item, index}) => (
             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('userProfile', {userId: item?._id});
+              }}
               key={index}
               style={{
                 marginBottom: 10,
