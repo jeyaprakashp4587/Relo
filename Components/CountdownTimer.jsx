@@ -52,7 +52,7 @@ const CountdownTimer = () => {
       <Text
         style={{
           fontSize: width * 0.04,
-          color: 'rgba(56, 61, 61, 0.78)',
+          color: 'rgba(215, 218, 218, 0.78)',
           letterSpacing: 0.3,
         }}>
         ⏳ Next Weekly Reset In:

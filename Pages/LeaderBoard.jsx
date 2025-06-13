@@ -57,14 +57,15 @@ const LeaderBoard = () => {
         style={{
           flex: 1,
           backgroundColor: 'black',
-          justifyContent: 'space-around',
+          justifyContent: 'space-evenly',
           alignItems: 'center',
+          paddingHorizontal: 15,
         }}>
-        <Skeleton width={width} height={50} />
-        <Skeleton width={width} height={100} />
-        <Skeleton width={width} height={300} />
-        <Skeleton width={width} height={100} />
-        <Skeleton width={width} height={50} />
+        <Skeleton width={width * 0.9} height={50} />
+        <Skeleton width={width * 0.9} height={100} />
+        <Skeleton width={width * 0.9} height={300} />
+        <Skeleton width={width * 0.9} height={100} />
+        <Skeleton width={width * 0.9} height={50} />
       </View>
     );
   if (error)
