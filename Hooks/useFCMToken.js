@@ -19,8 +19,6 @@ const useFCMToken = () => {
         authStatus === messaging.AuthorizationStatus.PROVISIONAL
       ) {
         const token = await messaging().getToken();
-        console.log(token);
-
         // Save token to the backend
         await axios.post(`${Api}/Profile/saveFcmToken`, {
           userId: user?._id,

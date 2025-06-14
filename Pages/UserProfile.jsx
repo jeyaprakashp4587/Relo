@@ -33,7 +33,7 @@ const UserProfile = () => {
         setSelectedUser(data);
       }
     } catch (error) {
-      ToastAndroid.show('error on get selectedUser', ToastAndroid.SHORT);
+      ToastAndroid.show('Error on get selected user', ToastAndroid.SHORT);
     }
   }, [userId]);
   useEffect(() => {
@@ -95,7 +95,7 @@ const UserProfile = () => {
             height: height * 0.06,
             borderRadius: 30,
           }}>
-          <Text style={{color: color.blue, fontFamily: Font.SemiBold}}>
+          <Text style={{color: color.black, fontFamily: Font.SemiBold}}>
             Send a message
           </Text>
         </TouchableOpacity>

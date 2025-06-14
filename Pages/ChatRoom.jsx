@@ -17,28 +17,33 @@ import {color} from '../Const/Color';
 import {useRoute} from '@react-navigation/native';
 import axios from 'axios';
 import {Api} from '../Api/Api';
+import {Font} from '../Const/Font';
+import RelativeTime from '../Components/RelativeTime';
 
 const ChatRoom = () => {
   const {ChatuserData} = useRoute().params;
-  console.log(ChatuserData);
 
   const {user} = useData();
   const {width, height} = Dimensions.get('window');
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState();
   const message = useRef(null);
   const textInput = useRef(null);
   const handleSetMessage = text => {
     message.current = text;
   };
+  const scrollList = useRef(null);
   const handleSendMessage = useCallback(async () => {
     const {status, data} = await axios.post(`${Api}/Chat/sendMessage`, {
       receiver: ChatuserData?.ChatUserId,
       sender: user?._id,
       message: message.current,
     });
+    if (status === 200 || status === 201) {
+      setChats(prev => [...prev, ...data?.chats]);
+    }
     message.current = '';
     textInput.current?.clear();
-  }, [ChatuserData, user, textInput, message]);
+  }, [ChatuserData, user, textInput, message, chats]);
   // fetch messages
   const fetchMessages = useCallback(async () => {
     try {
@@ -49,7 +54,10 @@ const ChatRoom = () => {
         },
       });
       if (status === 200) {
-        setChats(data.chats);
+        setChats(data?.chats);
+        setTimeout(() => {
+          scrollList.current?.scrollToEnd({animated: true});
+        }, 100);
       }
     } catch (error) {
       ToastAndroid.show('error get messages', ToastAndroid.SHORT);
@@ -58,34 +66,57 @@ const ChatRoom = () => {
   useEffect(() => {
     fetchMessages();
   }, []);
-  const MessageUi = useCallback(({chats}) => {
-    return (
-      <View
-        style={{
-          // borderWidth: 1,
-          borderColor: 'yellow',
-          padding: 10,
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-        }}>
-        {/* <FastImage source={{uri: u}} /> */}
-        <Text
+
+  const MessageUi = useCallback(
+    ({chats}) => {
+      return (
+        <View
           style={{
-            color: color.white,
-            textAlign: 'left',
-            backgroundColor: 'rgba(136, 139, 139, 0.37)',
-            padding: 10,
-            paddingHorizontal: 20,
-            borderRadius: 5,
-            borderLeftWidth: 3,
-            borderColor: 'rgb(69, 100, 184)',
+            // borderWidth: 1,
+            borderColor: 'yellow',
+            padding: 5,
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-end',
+            columnGap: 10,
           }}>
-          {chats?.msg}
-        </Text>
-      </View>
-    );
-  });
+          <FastImage
+            source={{
+              uri:
+                chats?.senderId === user?._id
+                  ? user?.ProfileImg
+                  : ChatuserData?.ChatUserImage,
+              priority: FastImage.priority.high,
+            }}
+            style={{width: width * 0.1, aspectRatio: 1, borderRadius: 100}}
+          />
+          <Text
+            style={{
+              fontfamily: Font.Light,
+              color: color.white,
+              textAlign: 'left',
+              backgroundColor: 'rgba(136, 139, 139, 0.37)',
+              padding: 10,
+              borderRadius: 5,
+              borderLeftWidth: 3,
+              borderColor:
+                chats?.senderId === user?._id ? 'rgb(69, 100, 184)' : 'red',
+              flexShrink: 1,
+              fontFamily: Font.Medium,
+              letterSpacing: 0.4,
+              fontSize: width * 0.035,
+            }}
+            selectable
+            numberOfLines={0}
+            lineBreakMode="tail">
+            {chats?.msg}
+          </Text>
+          <RelativeTime time={chats?.Time} fsize={width * 0.024} />
+        </View>
+      );
+    },
+    [chats],
+  );
   return (
     <ImageBackground
       source={{
@@ -97,9 +128,15 @@ const ChatRoom = () => {
       {/* chat view */}
       <View style={{borderWidth: 0, borderColor: 'red', flex: 1}}>
         <FlatList
+          ref={scrollList}
           data={chats}
           keyExtractor={item => item?._id}
+          showsVerticalScrollIndicator={false}
+          key={(_, index) => index}
           renderItem={({item, index}) => <MessageUi chats={item} />}
+          onContentSizeChange={() => {
+            scrollList.current?.scrollToEnd({animated: false});
+          }}
         />
       </View>
       {/* textInput view */}
