@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {color} from '../Const/Color';
 import axios from 'axios';
 import {Api} from '../Api/Api';
@@ -20,8 +20,10 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const UserProfile = () => {
   const {width, height} = Dimensions.get('window');
+  const navigation = useNavigation();
   const {userId} = useRoute().params;
   const [user, setUser] = useState();
+
   const getUser = useCallback(async () => {
     try {
       const {data, status} = await axios.get(
@@ -56,7 +58,6 @@ const UserProfile = () => {
         }}>
         <FastImage
           source={{uri: user?.ProfileImg}}
-          // resizeMode="contain"
           style={{
             width: width * 0.3,
             aspectRatio: 1,
@@ -73,6 +74,23 @@ const UserProfile = () => {
           }}>
           {user?.Name}
         </Text>
+      </View>
+      {/* show message to user */}
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('chatRoom')}
+          style={{
+            backgroundColor: color.white,
+            width: '80%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: height * 0.056,
+            borderRadius: 20,
+          }}>
+          <Text style={{color: color.blue, fontFamily: Font.SemiBold}}>
+            Send a message
+          </Text>
+        </TouchableOpacity>
       </View>
       {/* show user posts */}
       <View style={{paddingHorizontal: 15}}>
