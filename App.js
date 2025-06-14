@@ -6,6 +6,7 @@ import {color} from './Const/Color';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {ContextProvider} from './Context/Contexter';
 import MobileAds from 'react-native-google-mobile-ads';
+import {SocketProvider} from './Socket/SocketContext';
 
 const App = () => {
   useEffect(() => {
@@ -17,10 +18,12 @@ const App = () => {
   return (
     <GestureHandlerRootView>
       <ContextProvider>
-        <SafeAreaProvider>
-          <Navigation />
-          <StatusBar barStyle="light-content" backgroundColor={color.black} />
-        </SafeAreaProvider>
+        <SocketProvider>
+          <SafeAreaProvider>
+            <Navigation />
+            <StatusBar barStyle="light-content" backgroundColor={color.black} />
+          </SafeAreaProvider>
+        </SocketProvider>
       </ContextProvider>
     </GestureHandlerRootView>
   );

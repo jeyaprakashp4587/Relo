@@ -17,23 +17,23 @@ import FastImage from 'react-native-fast-image';
 import {Font} from '../Const/Font';
 import GoBackArrow from '../Components/GoBackArrow';
 import LinearGradient from 'react-native-linear-gradient';
+import {useData} from '../Context/Contexter';
 
 const UserProfile = () => {
   const {width, height} = Dimensions.get('window');
   const navigation = useNavigation();
   const {userId} = useRoute().params;
-  const [user, setUser] = useState();
-
+  const [selectedUser, setSelectedUser] = useState();
   const getUser = useCallback(async () => {
     try {
       const {data, status} = await axios.get(
         `${Api}/Profile/getUser/${userId}`,
       );
       if (status === 200) {
-        setUser(data);
+        setSelectedUser(data);
       }
     } catch (error) {
-      ToastAndroid.show('error on get user', ToastAndroid.SHORT);
+      ToastAndroid.show('error on get selectedUser', ToastAndroid.SHORT);
     }
   }, [userId]);
   useEffect(() => {
@@ -49,7 +49,7 @@ const UserProfile = () => {
       <View style={{paddingHorizontal: 15}}>
         <GoBackArrow text="User profile" />
       </View>
-      {/* user profile */}
+      {/* selectedUser profile */}
       <View
         style={{
           flexDirection: 'column',
@@ -57,7 +57,7 @@ const UserProfile = () => {
           alignItems: 'center',
         }}>
         <FastImage
-          source={{uri: user?.ProfileImg}}
+          source={{uri: selectedUser?.ProfileImg}}
           style={{
             width: width * 0.3,
             aspectRatio: 1,
@@ -72,27 +72,35 @@ const UserProfile = () => {
             fontFamily: Font.SemiBold,
             fontSize: width * 0.09,
           }}>
-          {user?.Name}
+          {selectedUser?.Name}
         </Text>
       </View>
-      {/* show message to user */}
+      {/* show message to selectedUser */}
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('chatRoom')}
+          onPress={() => {
+            navigation.navigate('chatRoom', {
+              ChatuserData: {
+                ChatUserName: selectedUser?.Name,
+                ChatUserImage: selectedUser?.ProfileImg,
+                ChatUserId: userId,
+              },
+            });
+          }}
           style={{
             backgroundColor: color.white,
             width: '80%',
             justifyContent: 'center',
             alignItems: 'center',
-            height: height * 0.056,
-            borderRadius: 20,
+            height: height * 0.06,
+            borderRadius: 30,
           }}>
           <Text style={{color: color.blue, fontFamily: Font.SemiBold}}>
             Send a message
           </Text>
         </TouchableOpacity>
       </View>
-      {/* show user posts */}
+      {/* show selectedUser posts */}
       <View style={{paddingHorizontal: 15}}>
         <Text
           style={{
@@ -104,7 +112,7 @@ const UserProfile = () => {
           Posts
         </Text>
         <FlatList
-          data={user?.Post}
+          data={selectedUser?.Post}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item?._id}
           contentContainerStyle={{

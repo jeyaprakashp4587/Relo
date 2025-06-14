@@ -18,6 +18,7 @@ import axios from 'axios';
 import {Api} from '../Api/Api';
 import FadeView from './FadeView';
 import {useNavigation} from '@react-navigation/native';
+import {useData} from '../Context/Contexter';
 
 const {width, height} = Dimensions.get('window');
 
@@ -25,6 +26,7 @@ const PostWrapper = ({Post, goNext}) => {
   const navigation = useNavigation();
   const [isShowModel, setIsShowModel] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
+  const {user: mainUser} = useData();
   const [voteIndi, setVoteIndi] = useState({user1: false, user2: false});
   const [postVote, setPostVote] = useState({
     user1: Post?.user1?.Post?.PostVote || 0,
@@ -150,6 +152,10 @@ const PostWrapper = ({Post, goNext}) => {
           <TouchableOpacity
             style={styles.profileBox}
             onPress={() => {
+              if (user?._id === mainUser?._id) {
+                navigation.navigate('Profile');
+                return;
+              }
               navigation.navigate('userProfile', {userId: user?._id});
             }}>
             <FastImage

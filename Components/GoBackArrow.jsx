@@ -35,7 +35,7 @@ const GoBackArrow = ({text}) => {
             priority: FastImage.priority.high,
           }}
           resizeMode="contain"
-          style={{width: 20, aspectRatio: 1}}
+          style={{width: width * 0.08, aspectRatio: 1}}
         />
       </TouchableOpacity>
       <Text
